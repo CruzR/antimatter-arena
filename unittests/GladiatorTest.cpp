@@ -148,4 +148,27 @@ TEST_F(GladiatorTest, CanEngageJetpackAgainAfterCooldown)
     EXPECT_TRUE(gladiator.canEngageJetpack());
 }
 
+TEST_F(GladiatorTest, JetpackIsNotActiveByDefault)
+{
+    EXPECT_FALSE(gladiator.isJetpackActive());
+}
+
+TEST_F(GladiatorTest, JetpackIsActiveAfterEngaged)
+{
+    gladiator.engageJetpack();
+    EXPECT_TRUE(gladiator.isJetpackActive());
+}
+
+TEST_F(GladiatorTest, JetpackBecomesInactiveAfterCooldown)
+{
+    gladiator.engageJetpack();
+
+    for (int i = 0; i < Gladiator::JETPACK_ACTIVE_COOLDOWN; ++i)
+    {
+        gladiator.tick();
+    }
+
+    EXPECT_FALSE(gladiator.isJetpackActive());
+}
+
 } // namespace

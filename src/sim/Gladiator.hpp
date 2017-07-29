@@ -21,6 +21,9 @@ class Gladiator
 
     bool canEngageJetpack() const;
     void engageJetpack();
+    bool isJetpackActive() const;
+
+    static const int JETPACK_ACTIVE_COOLDOWN = 60;
 
     private:
     bool m_active;
@@ -31,6 +34,8 @@ class Gladiator
     float m_velocityY;
     int m_launchCooldown;
     int m_jetpackCooldown;
+    bool m_jetpackActive;
+    int m_jetpackActiveCooldown;
 
     void updateVelocity();
 };

@@ -11,7 +11,9 @@ Gladiator::Gladiator()
     m_velocityX(0.0f),
     m_velocityY(0.0f),
     m_launchCooldown(0),
-    m_jetpackCooldown(0)
+    m_jetpackCooldown(0),
+    m_jetpackActive(false),
+    m_jetpackActiveCooldown(0)
 {
 }
 
@@ -101,6 +103,12 @@ void Gladiator::tick()
     {
         m_jetpackCooldown -= 1;
     }
+
+    if (m_jetpackActiveCooldown > 0)
+    {
+        m_jetpackActiveCooldown -= 1;
+        m_jetpackActive = m_jetpackActiveCooldown > 0;
+    }
 }
 
 bool Gladiator::canEngageJetpack() const
@@ -111,4 +119,11 @@ bool Gladiator::canEngageJetpack() const
 void Gladiator::engageJetpack()
 {
     m_jetpackCooldown = JETPACK_COOLDOWN;
+    m_jetpackActive = true;
+    m_jetpackActiveCooldown = JETPACK_ACTIVE_COOLDOWN;
+}
+
+bool Gladiator::isJetpackActive() const
+{
+    return m_jetpackActive;
 }
