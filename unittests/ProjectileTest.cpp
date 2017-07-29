@@ -54,3 +54,18 @@ TEST_F(ProjectileTest, ChangesPositionOverTime)
     EXPECT_NEAR(50.0f, projectile.getPositionX(), 1.0e-4f);
     EXPECT_NEAR(0.0f, projectile.getPositionY(), 1.0e-4f);
 }
+
+TEST_F(ProjectileTest, IsNotDestroyedAtSpawn)
+{
+    EXPECT_FALSE(projectile.isDestroyed());
+}
+
+TEST_F(ProjectileTest, IsDestroyedAfterTimeout)
+{
+    for (int i = 0; i < Projectile::EXPLODE_TIMEOUT; ++i)
+    {
+        projectile.tick();
+    }
+
+    EXPECT_TRUE(projectile.isDestroyed());
+}

@@ -10,9 +10,12 @@ class Projectile
     float getVelocityX() const;
     float getVelocityY() const;
     void tick();
+    bool isDestroyed() const;
 
     /* Equivalent to 120 km/h. */
     static constexpr float SPEED = 0.555556f;
+
+    static const int EXPLODE_TIMEOUT = 120;
 
     private:
     float m_positionX;
@@ -20,6 +23,7 @@ class Projectile
     float m_moveDirection;
     float m_velocityX;
     float m_velocityY;
+    int m_explosionTimout;
 
     void updateVelocity();
 };

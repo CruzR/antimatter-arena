@@ -6,7 +6,8 @@ Projectile::Projectile()
     :
     m_positionX(0.0f),
     m_positionY(0.0f),
-    m_moveDirection(0.0f)
+    m_moveDirection(0.0f),
+    m_explosionTimout(EXPLODE_TIMEOUT)
 {
     updateVelocity();
 }
@@ -59,4 +60,14 @@ void Projectile::tick()
 {
     m_positionX += m_velocityX;
     m_positionY += m_velocityY;
+
+    if (m_explosionTimout > 0)
+    {
+        m_explosionTimout -= 1;
+    }
+}
+
+bool Projectile::isDestroyed() const
+{
+    return m_explosionTimout <= 0;
 }
