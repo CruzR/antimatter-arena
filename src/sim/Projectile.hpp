@@ -9,6 +9,7 @@ class Projectile
     void setMoveDirection(float moveDirection);
     float getVelocityX() const;
     float getVelocityY() const;
+    void tick();
 
     /* Equivalent to 120 km/h. */
     static constexpr float SPEED = 0.555556f;

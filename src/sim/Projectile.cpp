@@ -54,3 +54,9 @@ void Projectile::updateVelocity()
     m_velocityX = std::cos(moveDirectionRad) * SPEED;
     m_velocityY = std::sin(moveDirectionRad) * SPEED;
 }
+
+void Projectile::tick()
+{
+    m_positionX += m_velocityX;
+    m_positionY += m_velocityY;
+}
