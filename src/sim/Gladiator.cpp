@@ -114,7 +114,13 @@ void Gladiator::tick()
     if (m_jetpackActiveCooldown > 0)
     {
         m_jetpackActiveCooldown -= 1;
-        m_jetpackActive = m_jetpackActiveCooldown > 0;
+
+        if (m_jetpackActiveCooldown == 0)
+        {
+            m_jetpackActive = false;
+            m_speed = 0.0f;
+            updateVelocity();
+        }
     }
 }
 
@@ -125,6 +131,8 @@ bool Gladiator::canEngageJetpack() const
 
 void Gladiator::engageJetpack()
 {
+    m_speed = JETPACK_SPEED;
+    updateVelocity();
     m_jetpackCooldown = JETPACK_COOLDOWN;
     m_jetpackActive = true;
     m_jetpackActiveCooldown = JETPACK_ACTIVE_COOLDOWN;

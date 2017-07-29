@@ -25,6 +25,12 @@ class Gladiator
 
     static const int JETPACK_ACTIVE_COOLDOWN = 60;
 
+    /* Equivalent to 12 km/h, approximately jogging speed. */
+    static constexpr float MOVEMENT_SPEED = 0.055556f;
+
+    /* Equivalent to 100 km/h. */
+    static constexpr float JETPACK_SPEED = 0.462963f;
+
     private:
     bool m_active;
     float m_aimDirection;

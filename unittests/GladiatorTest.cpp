@@ -187,4 +187,22 @@ TEST_F(GladiatorTest, SpeedIsLockedWhileJetpackActive)
     EXPECT_FLOAT_EQ(speed, gladiator.getSpeed());
 }
 
+TEST_F(GladiatorTest, SpeedIsSetToJetpackSpeedWhileJetpackActive)
+{
+    gladiator.engageJetpack();
+    EXPECT_FLOAT_EQ(Gladiator::JETPACK_SPEED, gladiator.getSpeed());
+}
+
+TEST_F(GladiatorTest, SpeedIsSetToZeroAfterJetpackActive)
+{
+    gladiator.engageJetpack();
+
+    for (int i = 0; i < Gladiator::JETPACK_ACTIVE_COOLDOWN; ++i)
+    {
+        gladiator.tick();
+    }
+
+    EXPECT_FLOAT_EQ(0.0f, gladiator.getSpeed());
+}
+
 } // namespace
