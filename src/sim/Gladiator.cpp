@@ -50,8 +50,12 @@ float Gladiator::getSpeed() const
 void Gladiator::setSpeed(float speed)
 {
     assert(speed >= 0.0f);
-    m_speed = speed;
-    updateVelocity();
+
+    if (!m_jetpackActive)
+    {
+        m_speed = speed;
+        updateVelocity();
+    }
 }
 
 float Gladiator::getMoveDirection() const
@@ -61,8 +65,11 @@ float Gladiator::getMoveDirection() const
 
 void Gladiator::setMoveDirection(float moveDirection)
 {
-    m_moveDirection = clampAngles(moveDirection);
-    updateVelocity();
+    if (!m_jetpackActive)
+    {
+        m_moveDirection = clampAngles(moveDirection);
+        updateVelocity();
+    }
 }
 
 float Gladiator::getVelocityX() const

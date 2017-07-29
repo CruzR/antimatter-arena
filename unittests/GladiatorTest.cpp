@@ -171,4 +171,20 @@ TEST_F(GladiatorTest, JetpackBecomesInactiveAfterCooldown)
     EXPECT_FALSE(gladiator.isJetpackActive());
 }
 
+TEST_F(GladiatorTest, MoveDirectionIsLockedWhileJetpackActive)
+{
+    gladiator.engageJetpack();
+    const float moveDirection = gladiator.getMoveDirection();
+    gladiator.setMoveDirection(moveDirection + 90.0f);
+    EXPECT_FLOAT_EQ(moveDirection, gladiator.getMoveDirection());
+}
+
+TEST_F(GladiatorTest, SpeedIsLockedWhileJetpackActive)
+{
+    gladiator.engageJetpack();
+    const float speed = gladiator.getSpeed();
+    gladiator.setSpeed(speed + 1.0f);
+    EXPECT_FLOAT_EQ(speed, gladiator.getSpeed());
+}
+
 } // namespace
