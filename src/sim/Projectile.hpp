@@ -1,0 +1,5 @@
+class Projectile
+{
+    public:
+    Projectile();
+};
