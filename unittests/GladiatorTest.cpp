@@ -205,4 +205,18 @@ TEST_F(GladiatorTest, SpeedIsSetToZeroAfterJetpackActive)
     EXPECT_FLOAT_EQ(0.0f, gladiator.getSpeed());
 }
 
+TEST_F(GladiatorTest, PositionIsAtOriginAtSpawn)
+{
+    EXPECT_FLOAT_EQ(0.0f, gladiator.getPositionX());
+    EXPECT_FLOAT_EQ(0.0f, gladiator.getPositionY());
+}
+
+TEST_F(GladiatorTest, PositionChangesAccordingToVelocity)
+{
+    gladiator.setSpeed(1.0f);
+    gladiator.tick();
+    EXPECT_NEAR(1.0f, gladiator.getPositionX(), 1.0e-6f);
+    EXPECT_NEAR(0.0f, gladiator.getPositionY(), 1.0e-6f);
+}
+
 } // namespace

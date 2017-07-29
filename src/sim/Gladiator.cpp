@@ -13,7 +13,9 @@ Gladiator::Gladiator()
     m_launchCooldown(0),
     m_jetpackCooldown(0),
     m_jetpackActive(false),
-    m_jetpackActiveCooldown(0)
+    m_jetpackActiveCooldown(0),
+    m_positionX(0.0f),
+    m_positionY(0.0f)
 {
 }
 
@@ -101,6 +103,9 @@ void Gladiator::launchRocket()
 
 void Gladiator::tick()
 {
+    m_positionX += m_velocityX;
+    m_positionY += m_velocityY;
+
     if (m_launchCooldown > 0)
     {
         m_launchCooldown -= 1;
@@ -141,4 +146,14 @@ void Gladiator::engageJetpack()
 bool Gladiator::isJetpackActive() const
 {
     return m_jetpackActive;
+}
+
+float Gladiator::getPositionX() const
+{
+    return m_positionX;
+}
+
+float Gladiator::getPositionY() const
+{
+    return m_positionY;
 }

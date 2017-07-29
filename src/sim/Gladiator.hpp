@@ -31,6 +31,9 @@ class Gladiator
     /* Equivalent to 100 km/h. */
     static constexpr float JETPACK_SPEED = 0.462963f;
 
+    float getPositionX() const;
+    float getPositionY() const;
+
     private:
     bool m_active;
     float m_aimDirection;
@@ -42,6 +45,8 @@ class Gladiator
     int m_jetpackCooldown;
     bool m_jetpackActive;
     int m_jetpackActiveCooldown;
+    float m_positionX;
+    float m_positionY;
 
     void updateVelocity();
 };
