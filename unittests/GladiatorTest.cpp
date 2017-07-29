@@ -113,4 +113,16 @@ TEST_F(GladiatorTest, CannotLaunchTwoRockets)
     EXPECT_FALSE(gladiator.canLaunchRocket());
 }
 
+TEST_F(GladiatorTest, CanLaunchSecondRocketAfterCooldown)
+{
+    gladiator.launchRocket();
+
+    for (int i = 0; i < Gladiator::ROCKET_LAUNCH_COOLDOWN; ++i)
+    {
+        gladiator.tick();
+    }
+
+    EXPECT_TRUE(gladiator.canLaunchRocket());
+}
+
 } // namespace

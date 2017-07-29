@@ -10,7 +10,7 @@ Gladiator::Gladiator()
     m_moveDirection(0.0f),
     m_velocityX(0.0f),
     m_velocityY(0.0f),
-    m_canLaunchRocket(true)
+    m_launchCooldown(0)
 {
 }
 
@@ -81,10 +81,18 @@ void Gladiator::updateVelocity()
 
 bool Gladiator::canLaunchRocket() const
 {
-    return m_canLaunchRocket;
+    return m_launchCooldown <= 0;
 }
 
 void Gladiator::launchRocket()
 {
-    m_canLaunchRocket = false;
+    m_launchCooldown = ROCKET_LAUNCH_COOLDOWN;
+}
+
+void Gladiator::tick()
+{
+    if (m_launchCooldown > 0)
+    {
+        m_launchCooldown -= 1;
+    }
 }

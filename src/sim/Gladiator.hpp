@@ -14,6 +14,9 @@ class Gladiator
     float getVelocityY() const;
     bool canLaunchRocket() const;
     void launchRocket();
+    void tick();
+
+    static const int ROCKET_LAUNCH_COOLDOWN = 120;
 
     private:
     bool m_active;
@@ -22,7 +25,7 @@ class Gladiator
     float m_moveDirection;
     float m_velocityX;
     float m_velocityY;
-    bool m_canLaunchRocket;
+    int m_launchCooldown;
 
     void updateVelocity();
 };
