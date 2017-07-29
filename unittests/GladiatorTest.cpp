@@ -102,4 +102,15 @@ TEST_F(GladiatorTest, SetMoveDirectionChangesVelocity)
     EXPECT_FLOAT_EQ(1.0f, gladiator.getVelocityY());
 }
 
+TEST_F(GladiatorTest, CanLaunchRocketAfterSpawn)
+{
+    EXPECT_TRUE(gladiator.canLaunchRocket());
+}
+
+TEST_F(GladiatorTest, CannotLaunchTwoRockets)
+{
+    gladiator.launchRocket();
+    EXPECT_FALSE(gladiator.canLaunchRocket());
+}
+
 } // namespace

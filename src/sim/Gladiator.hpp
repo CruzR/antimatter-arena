@@ -12,6 +12,8 @@ class Gladiator
     void setMoveDirection(float moveDirection);
     float getVelocityX() const;
     float getVelocityY() const;
+    bool canLaunchRocket() const;
+    void launchRocket();
 
     private:
     bool m_active;
@@ -20,6 +22,7 @@ class Gladiator
     float m_moveDirection;
     float m_velocityX;
     float m_velocityY;
+    bool m_canLaunchRocket;
 
     void updateVelocity();
 };

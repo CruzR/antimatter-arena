@@ -9,7 +9,8 @@ Gladiator::Gladiator()
     m_speed(0.0f),
     m_moveDirection(0.0f),
     m_velocityX(0.0f),
-    m_velocityY(0.0f)
+    m_velocityY(0.0f),
+    m_canLaunchRocket(true)
 {
 }
 
@@ -76,4 +77,14 @@ void Gladiator::updateVelocity()
     const float moveDirectionRad = (m_moveDirection / 360.0f) * 2.0f * M_PI;
     m_velocityX = std::cos(moveDirectionRad) * m_speed;
     m_velocityY = std::sin(moveDirectionRad) * m_speed;
+}
+
+bool Gladiator::canLaunchRocket() const
+{
+    return m_canLaunchRocket;
+}
+
+void Gladiator::launchRocket()
+{
+    m_canLaunchRocket = false;
 }
