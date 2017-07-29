@@ -10,7 +10,8 @@ Gladiator::Gladiator()
     m_moveDirection(0.0f),
     m_velocityX(0.0f),
     m_velocityY(0.0f),
-    m_launchCooldown(0)
+    m_launchCooldown(0),
+    m_jetpackCooldown(0)
 {
 }
 
@@ -95,4 +96,19 @@ void Gladiator::tick()
     {
         m_launchCooldown -= 1;
     }
+
+    if (m_jetpackCooldown > 0)
+    {
+        m_jetpackCooldown -= 1;
+    }
+}
+
+bool Gladiator::canEngageJetpack() const
+{
+    return m_jetpackCooldown <= 0;
+}
+
+void Gladiator::engageJetpack()
+{
+    m_jetpackCooldown = JETPACK_COOLDOWN;
 }

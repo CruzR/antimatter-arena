@@ -17,6 +17,10 @@ class Gladiator
     void tick();
 
     static const int ROCKET_LAUNCH_COOLDOWN = 120;
+    static const int JETPACK_COOLDOWN = 600;
+
+    bool canEngageJetpack() const;
+    void engageJetpack();
 
     private:
     bool m_active;
@@ -26,6 +30,7 @@ class Gladiator
     float m_velocityX;
     float m_velocityY;
     int m_launchCooldown;
+    int m_jetpackCooldown;
 
     void updateVelocity();
 };

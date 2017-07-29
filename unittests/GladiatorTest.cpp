@@ -125,4 +125,27 @@ TEST_F(GladiatorTest, CanLaunchSecondRocketAfterCooldown)
     EXPECT_TRUE(gladiator.canLaunchRocket());
 }
 
+TEST_F(GladiatorTest, CanEngageJetpackAfterSpawn)
+{
+    EXPECT_TRUE(gladiator.canEngageJetpack());
+}
+
+TEST_F(GladiatorTest, CannotEngageJetpackTwice)
+{
+    gladiator.engageJetpack();
+    EXPECT_FALSE(gladiator.canEngageJetpack());
+}
+
+TEST_F(GladiatorTest, CanEngageJetpackAgainAfterCooldown)
+{
+    gladiator.engageJetpack();
+
+    for (int i = 0; i < Gladiator::JETPACK_COOLDOWN; ++i)
+    {
+        gladiator.tick();
+    }
+
+    EXPECT_TRUE(gladiator.canEngageJetpack());
+}
+
 } // namespace
