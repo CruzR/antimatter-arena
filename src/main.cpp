@@ -32,6 +32,11 @@ int main(int argc, char *argv[])
     SDL_initFramerate(&fpsManager);
     SDL_setFramerate(&fpsManager, 60);
 
+    SDL_Rect playerRect = { 0, 0, 128, 128 };
+    SDL_Rect projectileRect = { 128, 48, 32, 32 };
+
+    SDL_LogSetAllPriority(SDL_LOG_PRIORITY_WARN);
+
     while (!shouldQuit)
     {
         SDL_Event event;
@@ -45,6 +50,19 @@ int main(int argc, char *argv[])
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
         SDL_RenderClear(renderer);
+        int err = 0;
+        err = SDL_RenderCopy(renderer, textureLoader.get(TextureLoader::TEXTURE_PLAYER), NULL, &playerRect);
+        if (err < 0)
+        {
+            SDL_LogError(SDL_LOG_CATEGORY_ERROR, "RenderCopy(%p) failed: %s", textureLoader.get(TextureLoader::TEXTURE_PLAYER), SDL_GetError());
+        }
+
+        err = SDL_RenderCopy(renderer, textureLoader.get(TextureLoader::TEXTURE_PROJECTILE), NULL, &projectileRect);
+        if (err < 0)
+        {
+            SDL_LogError(SDL_LOG_CATEGORY_ERROR, "RenderCopy(%p) failed: %s", textureLoader.get(TextureLoader::TEXTURE_PROJECTILE), SDL_GetError());
+        }
+
         SDL_RenderPresent(renderer);
 
         SDL_framerateDelay(&fpsManager);

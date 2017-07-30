@@ -21,6 +21,8 @@ void TextureLoader::loadTexture(SDL_Renderer *renderer, TextureId texture, const
     assert(imageTexture != 0);
 
     SDL_FreeSurface(imageSurface);
+
+    m_loadedTextures.at(texture) = imageTexture;
 }
 
 SDL_Texture* TextureLoader::get(TextureId texture)
