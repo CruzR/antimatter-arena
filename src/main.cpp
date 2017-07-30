@@ -1,8 +1,10 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
+#include <sstream>
 #include "SDL.h"
 #include "SDL2_framerate.h"
+#include "SDL_ttf.h"
 #include "render/TextureLoader.hpp"
 #include "sim/Gladiator.hpp"
 
@@ -60,12 +62,52 @@ void moveRect(SDL_Rect *rect, SDL_GameController *controller)
     rect->y = std::round(std::min(std::max(0.0f, rect->y + velY), 540.0f - 128.0f));
 }
 
+static TTF_Font *comicNeue;
+
+void initTTF()
+{
+    int err = TTF_Init();
+    assert(err == 0);
+
+    comicNeue = TTF_OpenFont("assets/ComicNeue-Regular.otf", 16);
+    assert(comicNeue != nullptr);
+}
+
+void teardownTTF()
+{
+    TTF_CloseFont(comicNeue);
+}
+
+SDL_Surface* renderFpsString(int fps, SDL_Rect *rect)
+{
+    std::ostringstream s;
+    s << fps;
+
+    int w, h;
+
+    int err = TTF_SizeUTF8(comicNeue, s.str().c_str(), &w, &h);
+    assert(err == 0);
+
+    rect->w = w;
+    rect->h = h;
+    rect->x = 960 - 5 - w;
+    rect->y = 5;
+
+    SDL_Surface *renderedText = TTF_RenderUTF8_Solid(comicNeue, s.str().c_str(), { 255, 255, 255, 255 });
+
+    assert(renderedText != nullptr);
+
+    return renderedText;
+}
+
 int main(int argc, char *argv[])
 {
     TextureLoader textureLoader;
     Gladiator gladiator;
 
     SDL_Init(SDL_INIT_EVERYTHING);
+
+    initTTF();
 
     SDL_Window *mainWindow = SDL_CreateWindow("A game for ludumdare39",
                                               SDL_WINDOWPOS_UNDEFINED,
@@ -118,6 +160,13 @@ int main(int argc, char *argv[])
 
         moveRect(&playerRect, controller);
 
+        int framerate = SDL_getFramerate(&fpsManager);
+        SDL_Rect fpsRect;
+        SDL_Surface *fpsSurface = renderFpsString(framerate, &fpsRect);
+        // TODO: SDL docs recommend against using CreateTextureFromSurface each frame.
+        SDL_Texture *fpsTexture = SDL_CreateTextureFromSurface(renderer, fpsSurface);
+        SDL_FreeSurface(fpsSurface);
+
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
         SDL_RenderClear(renderer);
         int err = 0;
@@ -133,13 +182,19 @@ int main(int argc, char *argv[])
             SDL_LogError(SDL_LOG_CATEGORY_ERROR, "RenderCopy(%p) failed: %s", textureLoader.get(TextureLoader::TEXTURE_PROJECTILE), SDL_GetError());
         }
 
+        SDL_RenderCopy(renderer, fpsTexture, NULL, &fpsRect);
+
         SDL_RenderPresent(renderer);
+
+        SDL_DestroyTexture(fpsTexture);
 
         SDL_framerateDelay(&fpsManager);
     }
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(mainWindow);
+
+    teardownTTF();
 
     SDL_Quit();
 
