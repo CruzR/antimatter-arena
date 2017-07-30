@@ -3,3 +3,6 @@ build/
 
 # Vim swap files
 *.sw[po]
+
+# The executable
+ludumdare39-game
