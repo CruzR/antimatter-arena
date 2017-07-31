@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
 
     initTTF();
 
-    SDL_Window *mainWindow = SDL_CreateWindow("A game for ludumdare39",
+    SDL_Window *mainWindow = SDL_CreateWindow("Antimatter Arena",
                                               SDL_WINDOWPOS_UNDEFINED,
                                               SDL_WINDOWPOS_UNDEFINED,
                                               960,
@@ -122,25 +122,60 @@ int main(int argc, char *argv[])
     bool someoneHasWon = false;
     SDL_Rect victoryLine1Rect{0, 0, 0, 0};
     SDL_Rect victoryLine2Rect{0, 0, 0, 0};
+    SDL_Rect ctrlRect{0,0,0,0};
     SDL_Rect instructionsRect{0, 0, 0, 0};
+    SDL_Rect titleRect{0,0,0,0};
+    SDL_Rect fluff1Rect{0,0,0,0};
+    SDL_Rect fluff2Rect{0,0,0,0};
+    SDL_Rect fluff3Rect{0,0,0,0};
     TTF_SizeUTF8(comicNeueHuge, "VICTORY", &(victoryLine1Rect.w), &(victoryLine1Rect.h));
     TTF_SizeUTF8(comicNeueMedium, "Press any key to exit...", &(victoryLine2Rect.w), &(victoryLine2Rect.h));
+    TTF_SizeUTF8(comicNeueTiny, "Left Stick: Move, Right Stick: Aim, Left Trigger: Jetpack, Right Trigger: Shoot", &(ctrlRect.w), &(ctrlRect.h));
     TTF_SizeUTF8(comicNeueMedium, "Insert up to 4 gamepads, then press ENTER to start game.", &(instructionsRect.w), &(instructionsRect.h));
+    TTF_SizeUTF8(comicNeueHuge, "Antimatter Arena", &(titleRect.w), &(titleRect.h));
+    TTF_SizeUTF8(comicNeueMedium, "The ancient deflector shield is running out of power.", &(fluff1Rect.w), &(fluff1Rect.h));
+    TTF_SizeUTF8(comicNeueMedium, "Antimatter is leaking into this world.", &(fluff2Rect.w), &(fluff2Rect.h));
+    TTF_SizeUTF8(comicNeueMedium, "Throw your opponents into the sea of antimatter to win.", &(fluff3Rect.w), &(fluff3Rect.h));
     victoryLine1Rect.y = 20;
     victoryLine1Rect.x = (960 - victoryLine1Rect.w) / 2;
     victoryLine2Rect.y = (540 - victoryLine2Rect.h - 10);
     victoryLine2Rect.x = (960 - victoryLine2Rect.w) / 2;
-    instructionsRect.y = (540 - instructionsRect.h) / 2;
+    ctrlRect.y = 540 - ctrlRect.h - 10;
+    ctrlRect.x = (960 - ctrlRect.w) / 2;
+    instructionsRect.y = ctrlRect.y - instructionsRect.h - 5;
     instructionsRect.x = (960 - instructionsRect.w) / 2;
+    titleRect.y = 20;
+    titleRect.x = (960 - titleRect.w) / 2;
+    fluff1Rect.y = titleRect.y + titleRect.h + 100;
+    fluff1Rect.x = (960 - fluff1Rect.w) / 2;
+    fluff2Rect.y = fluff1Rect.y + fluff1Rect.h + 5;
+    fluff2Rect.x = (960 - fluff2Rect.w) / 2;
+    fluff3Rect.y = fluff2Rect.y + fluff2Rect.h + 5;
+    fluff3Rect.x = (960 - fluff3Rect.w) / 2;
     SDL_Surface *victoryLine1Surface = TTF_RenderUTF8_Blended(comicNeueHuge, "VICTORY", {255, 255, 255, 255});
     SDL_Surface *victoryLine2Surface = TTF_RenderUTF8_Blended(comicNeueMedium, "Press any key to exit...", {255, 255, 255, 255});
+    SDL_Surface *ctrlSurf = TTF_RenderUTF8_Blended(comicNeueTiny, "Left Stick: Move, Right Stick: Aim, Left Trigger: Jetpack, Right Trigger: Shoot", {255,255,255,255});
     SDL_Surface *instructionsSurface = TTF_RenderUTF8_Blended(comicNeueMedium, "Insert up to 4 gamepads, then press ENTER to start game.", {255, 255, 255, 255});
+    SDL_Surface *titleSurface = TTF_RenderUTF8_Blended(comicNeueHuge, "Antimatter Arena", {255, 255, 255, 255});
+    SDL_Surface *fluff1Surf = TTF_RenderUTF8_Blended(comicNeueMedium, "The ancient deflector shield is running out of power.", {255,255,255,255});
+    SDL_Surface *fluff2Surf = TTF_RenderUTF8_Blended(comicNeueMedium, "Antimatter is leaking into this world.", {255,255,255,255});
+    SDL_Surface *fluff3Surf = TTF_RenderUTF8_Blended(comicNeueMedium, "Throw your opponents into the sea of antimatter to win.", {255,255,255,255});
     SDL_Texture *victoryLine1Texture = SDL_CreateTextureFromSurface(renderer, victoryLine1Surface);
     SDL_Texture *victoryLine2Texture = SDL_CreateTextureFromSurface(renderer, victoryLine2Surface);
+    SDL_Texture *ctrlTexture = SDL_CreateTextureFromSurface(renderer, ctrlSurf);
     SDL_Texture *instructionsTexture = SDL_CreateTextureFromSurface(renderer, instructionsSurface);
+    SDL_Texture *titleTexture = SDL_CreateTextureFromSurface(renderer, titleSurface);
+    SDL_Texture *fluff1Texture = SDL_CreateTextureFromSurface(renderer, fluff1Surf);
+    SDL_Texture *fluff2Texture = SDL_CreateTextureFromSurface(renderer, fluff2Surf);
+    SDL_Texture *fluff3Texture = SDL_CreateTextureFromSurface(renderer, fluff3Surf);
     SDL_FreeSurface(victoryLine1Surface);
     SDL_FreeSurface(victoryLine2Surface);
+    SDL_FreeSurface(ctrlSurf);
     SDL_FreeSurface(instructionsSurface);
+    SDL_FreeSurface(titleSurface);
+    SDL_FreeSurface(fluff1Surf);
+    SDL_FreeSurface(fluff2Surf);
+    SDL_FreeSurface(fluff3Surf);
 
     while (!shouldQuit)
     {
@@ -216,7 +251,12 @@ int main(int argc, char *argv[])
 
         if (!gameStarted)
         {
+            SDL_RenderCopy(renderer, titleTexture, NULL, &titleRect);
+            SDL_RenderCopy(renderer, fluff1Texture, NULL, &fluff1Rect);
+            SDL_RenderCopy(renderer, fluff2Texture, NULL, &fluff2Rect);
+            SDL_RenderCopy(renderer, fluff3Texture, NULL, &fluff3Rect);
             SDL_RenderCopy(renderer, instructionsTexture, NULL, &instructionsRect);
+            SDL_RenderCopy(renderer, ctrlTexture, NULL, &ctrlRect);
         }
 
         if (gameStarted && !someoneHasWon)
@@ -244,7 +284,12 @@ int main(int argc, char *argv[])
 
     SDL_DestroyTexture(victoryLine1Texture);
     SDL_DestroyTexture(victoryLine2Texture);
+    SDL_DestroyTexture(ctrlTexture);
     SDL_DestroyTexture(instructionsTexture);
+    SDL_DestroyTexture(titleTexture);
+    SDL_DestroyTexture(fluff1Texture);
+    SDL_DestroyTexture(fluff2Texture);
+    SDL_DestroyTexture(fluff3Texture);
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(mainWindow);

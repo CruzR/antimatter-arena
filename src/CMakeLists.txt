@@ -12,5 +12,5 @@ add_subdirectory(sim)
 add_subdirectory(render)
 add_subdirectory(controller)
 
-add_executable(ludumdare39-game main.cpp)
-target_link_libraries(ludumdare39-game controller render sim ${SDL2_IMAGE_LIBRARIES} ${SDL2_GFX_LIBRARIES} ${SDL2_TTF_LIBRARIES} ${SDL2_LIBRARY})
+add_executable(antimatter-arena main.cpp)
+target_link_libraries(antimatter-arena controller render sim ${SDL2_IMAGE_LIBRARIES} ${SDL2_GFX_LIBRARIES} ${SDL2_TTF_LIBRARIES} ${SDL2_LIBRARY})
