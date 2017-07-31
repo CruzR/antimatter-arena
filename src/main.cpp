@@ -96,8 +96,11 @@ int main(int argc, char *argv[])
     }
     assert(controller != nullptr);
 
-    int player = world.spawnGladiatorAt(-2.0f, 0.0f);
-    int bot = world.spawnGladiatorAt(2.0f, 0.0f);
+    int player = world.spawnGladiatorAt(-4.0f, 0.0f);
+    int bot = world.spawnGladiatorAt(4.0f, 0.0f);
+    world.getGladiator(bot).setAimDirection(180.0f);
+    world.gladiatorLaunchProjectile(player);
+    world.gladiatorLaunchProjectile(bot);
     GladiatorController gladiatorController(world, player, controller);
 
     while (!shouldQuit)

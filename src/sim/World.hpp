@@ -27,6 +27,8 @@ class World
     std::vector<Gladiator> m_gladiators;
     std::vector<Projectile> m_projectiles;
     std::vector<Explosion> m_explosions;
+
+    void performCollisionChecks();
 };
 
 #endif // WORLD_HPP

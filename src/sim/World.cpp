@@ -78,6 +78,8 @@ void World::tick()
     {
         gladiator.tick();
     }
+
+    performCollisionChecks();
 }
 
 void World::gladiatorLaunchProjectile(int id)
@@ -115,4 +117,48 @@ int World::spawnExplosionAt(float x, float y)
 Explosion & World::getExplosion(int id)
 {
     return m_explosions.at(id);
+}
+
+void World::performCollisionChecks()
+{
+    for (int i = 0; m_projectiles.size() > 0 && i < m_projectiles.size() - 1; ++i)
+    {
+        float x0 = m_projectiles.at(i).getPositionX();
+        float y0 = m_projectiles.at(i).getPositionY();
+
+        for (int j = i + 1; j < m_projectiles.size(); ++j)
+        {
+            float x1 = m_projectiles.at(j).getPositionX();
+            float y1 = m_projectiles.at(j).getPositionY();
+            float distSquared = (x0 - x1) * (x0 - x1) + (y0 - y1) * (y0 - y1);
+
+            if (distSquared < 4 * Projectile::COLLISION_RADIUS * Projectile::COLLISION_RADIUS)
+            {
+                if (!m_projectiles.at(i).isDestroyed())
+                {
+                    m_projectiles.at(i).destroy();
+                    spawnExplosionAt(x0, y0);
+                }
+
+                if (!m_projectiles.at(j).isDestroyed())
+                {
+                    m_projectiles.at(j).destroy();
+                    spawnExplosionAt(x1, y1);
+                }
+            }
+        }
+    }
+
+    std::vector<Projectile> liveProjectiles;
+    liveProjectiles.reserve(m_projectiles.size());
+
+    for (Projectile & projectile : m_projectiles)
+    {
+        if (!projectile.isDestroyed())
+        {
+            liveProjectiles.push_back(projectile);
+        }
+    }
+
+    m_projectiles = liveProjectiles;
 }

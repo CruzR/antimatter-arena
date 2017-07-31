@@ -69,3 +69,9 @@ TEST_F(ProjectileTest, IsDestroyedAfterTimeout)
 
     EXPECT_TRUE(projectile.isDestroyed());
 }
+
+TEST_F(ProjectileTest, CanBeExplicitlyDestroyed)
+{
+    projectile.destroy();
+    EXPECT_TRUE(projectile.isDestroyed());
+}

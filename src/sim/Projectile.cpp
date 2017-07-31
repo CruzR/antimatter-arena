@@ -77,3 +77,8 @@ bool Projectile::isDestroyed() const
 {
     return m_explosionTimout <= 0;
 }
+
+void Projectile::destroy()
+{
+    m_explosionTimout = 0;
+}
