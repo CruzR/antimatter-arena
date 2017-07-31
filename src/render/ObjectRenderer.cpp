@@ -21,10 +21,14 @@ static const int PROJECTILE_SIZE = 32;
 
 static bool rectInScreen(SDL_Rect & rect, SDL_Rect screenRect)
 {
+#if 0
     return (rect.x >= screenRect.x && rect.x < screenRect.x + screenRect.w && rect.y >= screenRect.y && rect.y < screenRect.y + screenRect.h)
         || (rect.x >= screenRect.x && rect.x < screenRect.x + screenRect.w && rect.y + rect.h >= screenRect.y && rect.y + rect.h < screenRect.y + screenRect.h)
         || (rect.x + rect.w >= screenRect.x && rect.x + rect.w < screenRect.x + screenRect.w && rect.y >= screenRect.y && rect.y < screenRect.y + screenRect.h)
         || (rect.x + rect.w >= screenRect.x && rect.x + rect.w < screenRect.x + screenRect.w && rect.y + rect.h >= screenRect.y && rect.y + rect.h < screenRect.y + screenRect.h);
+#else
+    return true;
+#endif
 }
 
 void ObjectRenderer::render(SDL_Renderer *renderer, const Gladiator & gladiator, TextureLoader::TextureId texture)
