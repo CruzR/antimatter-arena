@@ -22,6 +22,8 @@ class World
     int getNumExplosions() const;
     int spawnExplosionAt(float x, float y);
     Explosion & getExplosion(int id);
+    int getNumPlayersAlive() const;
+    int findFirstLivingPlayer() const;
 
     private:
     std::vector<Gladiator> m_gladiators;

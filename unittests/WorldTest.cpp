@@ -198,4 +198,32 @@ TEST_F(WorldTest, CollisionIgnoresDeadPlayers)
     EXPECT_EQ(0, world.getNumExplosions());
 }
 
+TEST_F(WorldTest, NumPlayersAliveIgnoresDeadPlayers)
+{
+    world.spawnGladiatorAt(0.0f, 0.0f);
+    int id = world.spawnGladiatorAt(2.0f, 2.0f);
+
+    EXPECT_EQ(2, world.getNumPlayersAlive());
+
+    world.getGladiator(id).applyDamage(Gladiator::MAX_HEALTH);
+
+    EXPECT_EQ(1, world.getNumPlayersAlive());
+}
+
+TEST_F(WorldTest, FindFirstLivingPlayerReturnsFirstLivingPlayer)
+{
+    world.spawnGladiatorAt(0.0f, 0.0f);
+    EXPECT_EQ(0, world.findFirstLivingPlayer());
+}
+
+TEST_F(WorldTest, FindFirstLivingPlayerReturnsMinusOneIfAllAreDead)
+{
+    EXPECT_EQ(-1, world.findFirstLivingPlayer());
+
+    int id = world.spawnGladiatorAt(0.0f, 0.0f);
+    world.getGladiator(id).applyDamage(Gladiator::MAX_HEALTH);
+
+    EXPECT_EQ(-1, world.findFirstLivingPlayer());
+}
+
 } // namespace

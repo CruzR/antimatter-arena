@@ -193,3 +193,34 @@ void World::performCollisionChecks()
 
     m_projectiles = liveProjectiles;
 }
+
+int World::getNumPlayersAlive() const
+{
+    int numAlive = 0;
+
+    for (const Gladiator & g : m_gladiators)
+    {
+        if (g.isAlive())
+        {
+            numAlive += 1;
+        }
+    }
+
+    return numAlive;
+}
+
+int World::findFirstLivingPlayer() const
+{
+    int index = -1;
+
+    for (int i = 0; i < m_gladiators.size(); ++i)
+    {
+        if (m_gladiators.at(i).isAlive())
+        {
+            index = i;
+            break;
+        }
+    }
+
+    return index;
+}

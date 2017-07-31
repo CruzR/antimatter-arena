@@ -13,20 +13,28 @@
 #include "sim/World.hpp"
 #include "controller/GladiatorController.hpp"
 
-static TTF_Font *comicNeue;
+static TTF_Font *comicNeueTiny;
+static TTF_Font *comicNeueMedium;
+static TTF_Font *comicNeueHuge;
 
 void initTTF()
 {
     int err = TTF_Init();
     assert(err == 0);
 
-    comicNeue = TTF_OpenFont("assets/ComicNeue-Regular.otf", 16);
-    assert(comicNeue != nullptr);
+    comicNeueTiny = TTF_OpenFont("assets/ComicNeue-Regular.otf", 16);
+    assert(comicNeueTiny != nullptr);
+
+    comicNeueMedium = TTF_OpenFont("assets/ComicNeue-Regular.otf", 24);
+    assert(comicNeueMedium != nullptr);
+
+    comicNeueHuge = TTF_OpenFont("assets/ComicNeue-Regular.otf", 36);
+    assert(comicNeueHuge != nullptr);
 }
 
 void teardownTTF()
 {
-    TTF_CloseFont(comicNeue);
+    TTF_CloseFont(comicNeueTiny);
 }
 
 SDL_Surface* renderFpsString(int fps, SDL_Rect *rect)
@@ -36,7 +44,7 @@ SDL_Surface* renderFpsString(int fps, SDL_Rect *rect)
 
     int w, h;
 
-    int err = TTF_SizeUTF8(comicNeue, s.str().c_str(), &w, &h);
+    int err = TTF_SizeUTF8(comicNeueTiny, s.str().c_str(), &w, &h);
     assert(err == 0);
 
     rect->w = w;
@@ -44,7 +52,7 @@ SDL_Surface* renderFpsString(int fps, SDL_Rect *rect)
     rect->x = 960 - 5 - w;
     rect->y = 5;
 
-    SDL_Surface *renderedText = TTF_RenderUTF8_Solid(comicNeue, s.str().c_str(), { 255, 255, 255, 255 });
+    SDL_Surface *renderedText = TTF_RenderUTF8_Solid(comicNeueTiny, s.str().c_str(), { 255, 255, 255, 255 });
 
     assert(renderedText != nullptr);
 
@@ -103,6 +111,22 @@ int main(int argc, char *argv[])
     world.gladiatorLaunchProjectile(bot);
     GladiatorController gladiatorController(world, player, controller);
 
+    bool someoneHasWon = false;
+    SDL_Rect victoryLine1Rect{0, 0, 0, 0};
+    SDL_Rect victoryLine2Rect{0, 0, 0, 0};
+    TTF_SizeUTF8(comicNeueHuge, "VICTORY", &(victoryLine1Rect.w), &(victoryLine1Rect.h));
+    TTF_SizeUTF8(comicNeueMedium, "Press any key to exit...", &(victoryLine2Rect.w), &(victoryLine2Rect.h));
+    victoryLine1Rect.y = 20;
+    victoryLine1Rect.x = (960 - victoryLine1Rect.w) / 2;
+    victoryLine2Rect.y = (540 - victoryLine2Rect.h - 10);
+    victoryLine2Rect.x = (960 - victoryLine2Rect.w) / 2;
+    SDL_Surface *victoryLine1Surface = TTF_RenderUTF8_Blended(comicNeueHuge, "VICTORY", {255, 255, 255, 255});
+    SDL_Surface *victoryLine2Surface = TTF_RenderUTF8_Blended(comicNeueMedium, "Press any key to exit...", {255, 255, 255, 255});
+    SDL_Texture *victoryLine1Texture = SDL_CreateTextureFromSurface(renderer, victoryLine1Surface);
+    SDL_Texture *victoryLine2Texture = SDL_CreateTextureFromSurface(renderer, victoryLine2Surface);
+    SDL_FreeSurface(victoryLine1Surface);
+    SDL_FreeSurface(victoryLine2Surface);
+
     while (!shouldQuit)
     {
         SDL_Event event;
@@ -115,6 +139,11 @@ int main(int argc, char *argv[])
 
             if (event.type == SDL_KEYUP)
             {
+                if (someoneHasWon)
+                {
+                    shouldQuit = true;
+                }
+
                 if (event.key.keysym.scancode == SDL_SCANCODE_F5)
                 {
                     objectRenderer.toggleDrawDebugInformation();
@@ -124,6 +153,8 @@ int main(int argc, char *argv[])
 
         world.tick();
         gladiatorController.update();
+
+        someoneHasWon = world.getNumPlayersAlive() <= 1;
 
         int framerate = SDL_getFramerate(&fpsManager);
         SDL_Rect fpsRect;
@@ -139,6 +170,12 @@ int main(int argc, char *argv[])
         objectRenderer.zoomToFitGladiators(world.getGladiators());
         objectRenderer.render(renderer, world);
 
+        if (someoneHasWon)
+        {
+            SDL_RenderCopy(renderer, victoryLine1Texture, NULL, &victoryLine1Rect);
+            SDL_RenderCopy(renderer, victoryLine2Texture, NULL, &victoryLine2Rect);
+        }
+
         SDL_RenderCopy(renderer, fpsTexture, NULL, &fpsRect);
 
         SDL_RenderPresent(renderer);
@@ -147,6 +184,9 @@ int main(int argc, char *argv[])
 
         SDL_framerateDelay(&fpsManager);
     }
+
+    SDL_DestroyTexture(victoryLine1Texture);
+    SDL_DestroyTexture(victoryLine2Texture);
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(mainWindow);
