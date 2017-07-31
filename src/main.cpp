@@ -142,7 +142,7 @@ int main(int argc, char *argv[])
                         {
                             SDL_GameController *controller = SDL_GameControllerOpen(i);
                             assert(controller != nullptr);
-                            int player = world.spawnGladiatorAt(std::cos(numPlayers * M_PI / 2) * 5.0, std::sin(numPlayers * M_PI / 2) * 5.0);
+                            int player = world.spawnGladiatorAt(std::cos(numPlayers * M_PI / 2) * 5.0, std::sin(numPlayers * M_PI / 2) * 5.0, static_cast<Gladiator::Color>(numPlayers % static_cast<int>(Gladiator::NUM_COLORS)));
                             gladiatorControllers.emplace_back(world, player, controller);
                             numPlayers += 1;
                         }
@@ -150,7 +150,7 @@ int main(int argc, char *argv[])
 
                     while (numPlayers < 4)
                     {
-                        int dummy = world.spawnGladiatorAt(std::cos(numPlayers * M_PI / 2) * 5.0, std::sin(numPlayers * M_PI / 2) * 5.0);
+                        int dummy = world.spawnGladiatorAt(std::cos(numPlayers * M_PI / 2) * 5.0, std::sin(numPlayers * M_PI / 2) * 5.0, static_cast<Gladiator::Color>(numPlayers % static_cast<int>(Gladiator::NUM_COLORS)));
                         numPlayers += 1;
                     }
                 }

@@ -18,8 +18,13 @@ int World::getNumProjectiles() const
 
 int World::spawnGladiatorAt(float x, float y)
 {
+    return spawnGladiatorAt(x, y, Gladiator::COLOR_RED);
+}
+
+int World::spawnGladiatorAt(float x, float y, Gladiator::Color color)
+{
     int newId = m_gladiators.size();
-    m_gladiators.emplace_back(x, y);
+    m_gladiators.emplace_back(x, y, color);
     return newId;
 }
 

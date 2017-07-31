@@ -4,8 +4,16 @@
 class Gladiator
 {
     public:
+
+    enum Color
+    {
+        COLOR_RED = 0,
+        COLOR_BLUE,
+        NUM_COLORS
+    };
+
     Gladiator();
-    Gladiator(float positionX, float positionY);
+    Gladiator(float positionX, float positionY, Color color);
     bool isAlive() const;
     float getAimDirection() const;
     void setAimDirection(float aimDirection);
@@ -18,6 +26,8 @@ class Gladiator
     bool canLaunchRocket() const;
     void launchRocket();
     void tick();
+
+    Color getColor() const;
 
     static const int ROCKET_LAUNCH_COOLDOWN = 120;
     static const int JETPACK_COOLDOWN = 600;
@@ -70,6 +80,8 @@ class Gladiator
     int m_knockbackTimeout;
 
     int m_health;
+
+    Color m_color;
 
     void updateVelocity();
 };

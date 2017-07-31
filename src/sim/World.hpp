@@ -13,6 +13,7 @@ class World
     int getNumGladiators() const;
     int getNumProjectiles() const;
     int spawnGladiatorAt(float x, float y);
+    int spawnGladiatorAt(float x, float y, Gladiator::Color color);
     Gladiator & getGladiator(int id);
     int spawnProjectileAt(float x, float y, float rot);
     Projectile & getProjectile(int id);

@@ -5,11 +5,11 @@
 
 Gladiator::Gladiator()
     :
-    Gladiator(0.0f, 0.0f)
+    Gladiator(0.0f, 0.0f, COLOR_RED)
 {
 }
 
-Gladiator::Gladiator(float x, float y)
+Gladiator::Gladiator(float x, float y, Color color)
     :
     m_aimDirection(0.0f),
     m_speed(0.0f),
@@ -23,8 +23,14 @@ Gladiator::Gladiator(float x, float y)
     m_positionX(x),
     m_positionY(y),
     m_inKnockbackMode(false),
-    m_health(MAX_HEALTH)
+    m_health(MAX_HEALTH),
+    m_color(color)
 {
+}
+
+Gladiator::Color Gladiator::getColor() const
+{
+    return m_color;
 }
 
 bool Gladiator::isAlive() const
