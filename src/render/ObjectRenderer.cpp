@@ -21,7 +21,7 @@ static bool rectInScreen(SDL_Rect & rect, SDL_Rect screenRect)
         || (rect.x + rect.w >= screenRect.x && rect.x + rect.w < screenRect.x + screenRect.w && rect.y + rect.h >= screenRect.y && rect.y + rect.h < screenRect.y + screenRect.h);
 }
 
-void ObjectRenderer::render(SDL_Renderer *renderer, const Gladiator & gladiator)
+void ObjectRenderer::render(SDL_Renderer *renderer, const Gladiator & gladiator, TextureLoader::TextureId texture)
 {
     int screenX, screenY;
     toScreenCoords(gladiator.getPositionX(), gladiator.getPositionY(), screenX, screenY);
@@ -36,7 +36,7 @@ void ObjectRenderer::render(SDL_Renderer *renderer, const Gladiator & gladiator)
     {
         int err = SDL_RenderCopyEx(
             renderer,
-            m_textureLoader.get(TextureLoader::TEXTURE_PLAYER),
+            m_textureLoader.get(texture),
             NULL,
             &playerRect,
             gladiator.getAimDirection(),

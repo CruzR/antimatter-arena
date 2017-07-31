@@ -8,7 +8,8 @@ void TextureLoader::loadAllTextures(SDL_Renderer *renderer)
     const int availableLoaders = IMG_Init(IMG_INIT_PNG);
     assert((availableLoaders & IMG_INIT_PNG) != 0);
 
-    loadTexture(renderer, TEXTURE_PLAYER, "assets/player.png");
+    loadTexture(renderer, TEXTURE_PLAYER1, "assets/player1.png");
+    loadTexture(renderer, TEXTURE_PLAYER2, "assets/player2.png");
     loadTexture(renderer, TEXTURE_PROJECTILE, "assets/projectile.png");
 }
 

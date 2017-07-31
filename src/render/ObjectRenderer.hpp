@@ -11,7 +11,7 @@ class ObjectRenderer
 {
     public:
     ObjectRenderer(TextureLoader & loader);
-    void render(SDL_Renderer * renderer, const Gladiator & gladiator);
+    void render(SDL_Renderer * renderer, const Gladiator & gladiator, TextureLoader::TextureId texture);
     void render(SDL_Renderer * renderer, const Projectile & projectile);
 
     private:

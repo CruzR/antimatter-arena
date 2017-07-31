@@ -11,7 +11,8 @@ class TextureLoader
 
     enum TextureId
     {
-        TEXTURE_PLAYER = 0,
+        TEXTURE_PLAYER1 = 0,
+        TEXTURE_PLAYER2,
         TEXTURE_PROJECTILE,
         NUM_TEXTURES
     };
