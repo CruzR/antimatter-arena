@@ -163,6 +163,7 @@ bool Gladiator::canEngageJetpack() const
 void Gladiator::engageJetpack()
 {
     m_speed = JETPACK_SPEED;
+    m_moveDirection = m_aimDirection;
     updateVelocity();
     m_jetpackCooldown = JETPACK_COOLDOWN;
     m_jetpackActive = true;
