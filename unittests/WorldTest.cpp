@@ -128,4 +128,16 @@ TEST_F(WorldTest, RemovesDestroyedExplosions)
     EXPECT_EQ(0, world.getNumExplosions());
 }
 
+TEST_F(WorldTest, DestroyedRocketsAreReplacedByExplosions)
+{
+    world.spawnProjectileAt(0.0f, 0.0f, 0.0f);
+
+    for (int i = 0; i < Projectile::EXPLODE_TIMEOUT; ++i)
+    {
+        world.tick();
+    }
+
+    EXPECT_EQ(1, world.getNumExplosions());
+}
+
 } // namespace

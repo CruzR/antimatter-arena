@@ -42,20 +42,6 @@ Projectile & World::getProjectile(int id)
 
 void World::tick()
 {
-    std::vector<Projectile> liveProjectiles;
-    liveProjectiles.reserve(m_projectiles.size());
-
-    for (Projectile & projectile : m_projectiles)
-    {
-        projectile.tick();
-        if (!projectile.isDestroyed())
-        {
-            liveProjectiles.push_back(projectile);
-        }
-    }
-
-    m_projectiles = liveProjectiles;
-
     std::vector<Explosion> liveExplosions;
     liveExplosions.reserve(m_explosions.size());
 
@@ -69,6 +55,24 @@ void World::tick()
     }
 
     m_explosions = liveExplosions;
+
+    std::vector<Projectile> liveProjectiles;
+    liveProjectiles.reserve(m_projectiles.size());
+
+    for (Projectile & projectile : m_projectiles)
+    {
+        projectile.tick();
+        if (!projectile.isDestroyed())
+        {
+            liveProjectiles.push_back(projectile);
+        }
+        else
+        {
+            spawnExplosionAt(projectile.getPositionX(), projectile.getPositionY());
+        }
+    }
+
+    m_projectiles = liveProjectiles;
 
     for (Gladiator & gladiator : m_gladiators)
     {
