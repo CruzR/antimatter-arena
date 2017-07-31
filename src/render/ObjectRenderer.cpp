@@ -132,34 +132,36 @@ int ObjectRenderer::explosionSize()
 
 void ObjectRenderer::zoomToFitGladiators(std::vector<Gladiator> & gladiators)
 {
-    std::vector<float> positionsX(gladiators.size());
-    std::vector<float> positionsY(gladiators.size());
+    std::vector<float> positionsX, positionsY;
+    positionsX.reserve(gladiators.size());
+    positionsY.reserve(gladiators.size());
 
-    std::transform(
-        gladiators.begin(),
-        gladiators.end(),
-        positionsX.begin(),
-        [](Gladiator & g){ return g.getPositionX(); }
-    );
+    for (const Gladiator & g : gladiators)
+    {
+        if (g.isAlive())
+        {
+            positionsX.push_back(g.getPositionX());
+            positionsY.push_back(g.getPositionY());
+        }
+    }
 
-    std::transform(
-        gladiators.begin(),
-        gladiators.end(),
-        positionsY.begin(),
-        [](Gladiator & g){ return g.getPositionY(); }
-    );
+    if (positionsX.empty())
+    {
+        positionsX.push_back(0.0f);
+        positionsY.push_back(0.0f);
+    }
 
     const float centerX = std::accumulate(
         positionsX.begin(),
         positionsX.end(),
         0.0f
-    ) / gladiators.size();
+    ) / positionsX.size();
 
     const float centerY = std::accumulate(
         positionsY.begin(),
         positionsY.end(),
         0.0f
-    ) / gladiators.size();
+    ) / positionsY.size();
 
     std::pair<std::vector<float>::iterator, std::vector<float>::iterator> extremaX = std::minmax_element(positionsX.begin(), positionsX.end());
     std::pair<std::vector<float>::iterator, std::vector<float>::iterator> extremaY = std::minmax_element(positionsY.begin(), positionsY.end());
@@ -207,7 +209,10 @@ void ObjectRenderer::render(SDL_Renderer * renderer, World & world)
 
     for (int i = 0; i < world.getNumGladiators(); ++i)
     {
-        render(renderer, world.getGladiator(i), TextureLoader::TEXTURE_PLAYER1);
+        if (world.getGladiator(i).isAlive())
+        {
+            render(renderer, world.getGladiator(i), TextureLoader::TEXTURE_PLAYER1);
+        }
     }
 
     for (int i = 0; i < world.getNumExplosions(); ++i)

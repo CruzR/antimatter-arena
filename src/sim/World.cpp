@@ -164,6 +164,11 @@ void World::performCollisionChecks()
 
         for (Gladiator & gladiator : m_gladiators)
         {
+            if (!gladiator.isAlive())
+            {
+                continue;
+            }
+
             float x1 = gladiator.getPositionX();
             float y1 = gladiator.getPositionY();
             float distSquared = (x0 - x1) * (x0 - x1) + (y0 - y1) * (y0 - y1);

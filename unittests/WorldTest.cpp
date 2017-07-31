@@ -186,4 +186,16 @@ TEST_F(WorldTest, DamagePlayerWhenCollidingWithRockets)
     EXPECT_EQ(Gladiator::MAX_HEALTH - Projectile::DAMAGE, world.getGladiator(id).getHealth());
 }
 
+TEST_F(WorldTest, CollisionIgnoresDeadPlayers)
+{
+    world.spawnProjectileAt(-1*Projectile::SPEED, 0.0f, 0.0f);
+    int id = world.spawnGladiatorAt(0.0f, 0.0f);
+    world.getGladiator(id).applyDamage(Gladiator::MAX_HEALTH);
+
+    world.tick();
+
+    EXPECT_EQ(1, world.getNumProjectiles());
+    EXPECT_EQ(0, world.getNumExplosions());
+}
+
 } // namespace
