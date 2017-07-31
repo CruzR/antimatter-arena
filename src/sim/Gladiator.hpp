@@ -40,6 +40,8 @@ class Gladiator
 
     static constexpr float PROJECTILE_DISTANCE = 1.25f;
 
+    static constexpr float COLLISION_RADIUS = 0.5f;
+
     private:
     bool m_active;
     float m_aimDirection;

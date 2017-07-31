@@ -154,6 +154,29 @@ void World::performCollisionChecks()
 
     for (Projectile & projectile : m_projectiles)
     {
+        if (projectile.isDestroyed())
+        {
+            continue;
+        }
+
+        float x0 = projectile.getPositionX();
+        float y0 = projectile.getPositionY();
+
+        for (Gladiator & gladiator : m_gladiators)
+        {
+            float x1 = gladiator.getPositionX();
+            float y1 = gladiator.getPositionY();
+            float distSquared = (x0 - x1) * (x0 - x1) + (y0 - y1) * (y0 - y1);
+            float radiusSquared = (Projectile::COLLISION_RADIUS + Gladiator::COLLISION_RADIUS) * (Projectile::COLLISION_RADIUS + Gladiator::COLLISION_RADIUS);
+
+            if (distSquared < radiusSquared)
+            {
+                projectile.destroy();
+                spawnExplosionAt(x0, y0);
+                break;
+            }
+        }
+
         if (!projectile.isDestroyed())
         {
             liveProjectiles.push_back(projectile);
