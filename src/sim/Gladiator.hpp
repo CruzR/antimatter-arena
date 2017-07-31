@@ -9,6 +9,8 @@ class Gladiator
     {
         COLOR_RED = 0,
         COLOR_BLUE,
+        COLOR_GREEN,
+        COLOR_YELLOW,
         NUM_COLORS
     };
 

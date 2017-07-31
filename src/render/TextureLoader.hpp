@@ -13,6 +13,8 @@ class TextureLoader
     {
         TEXTURE_PLAYER1 = 0,
         TEXTURE_PLAYER2,
+        TEXTURE_PLAYER3,
+        TEXTURE_PLAYER4,
         TEXTURE_PROJECTILE,
         NUM_TEXTURES
     };

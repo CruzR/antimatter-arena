@@ -10,6 +10,8 @@ void TextureLoader::loadAllTextures(SDL_Renderer *renderer)
 
     loadTexture(renderer, TEXTURE_PLAYER1, "assets/player1.png");
     loadTexture(renderer, TEXTURE_PLAYER2, "assets/player2.png");
+    loadTexture(renderer, TEXTURE_PLAYER3, "assets/player3.png");
+    loadTexture(renderer, TEXTURE_PLAYER4, "assets/player4.png");
     loadTexture(renderer, TEXTURE_PROJECTILE, "assets/projectile.png");
 }
 
