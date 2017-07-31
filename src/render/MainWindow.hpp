@@ -1,0 +1,5 @@
+#ifndef MAIN_WINDOW_HPP
+#define MAIN_WINDOW_HPP
+
+
+#endif // MAIN_WINDOW_HPP

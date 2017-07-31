@@ -1,3 +1,6 @@
+#ifndef PROJECTILE_HPP
+#define PROJECTILE_HPP
+
 class Projectile
 {
     public:
@@ -27,3 +30,5 @@ class Projectile
 
     void updateVelocity();
 };
+
+#endif // PROJECTILE_HPP

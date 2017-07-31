@@ -1,3 +1,6 @@
+#ifndef TEXTURE_LOADER_HPP
+#define TEXTURE_LOADER_HPP
+
 #include <array>
 #include <SDL.h>
 
@@ -26,3 +29,5 @@ class TextureLoader
 
     void loadTexture(SDL_Renderer *renderer, TextureId texture, const char *imagePath);
 };
+
+#endif // TEXTURE_LOADER_HPP

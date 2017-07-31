@@ -1,3 +1,6 @@
+#ifndef GLADIATOR_HPP
+#define GLADIATOR_HPP
+
 class Gladiator
 {
     public:
@@ -50,3 +53,5 @@ class Gladiator
 
     void updateVelocity();
 };
+
+#endif // GLADIATOR_HPP
