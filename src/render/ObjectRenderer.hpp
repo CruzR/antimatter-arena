@@ -5,6 +5,7 @@
 #include "SDL.h"
 #include "sim/Gladiator.hpp"
 #include "sim/Projectile.hpp"
+#include "sim/World.hpp"
 #include "render/TextureLoader.hpp"
 
 
@@ -14,7 +15,8 @@ class ObjectRenderer
     ObjectRenderer(TextureLoader & loader);
     void render(SDL_Renderer * renderer, const Gladiator & gladiator, TextureLoader::TextureId texture);
     void render(SDL_Renderer * renderer, const Projectile & projectile);
-    void zoomToFitGladiators(const std::vector<const Gladiator *> & gladiators);
+    void render(SDL_Renderer * renderer, World & world);
+    void zoomToFitGladiators(std::vector<Gladiator> & gladiators);
     void toggleDrawDebugInformation();
 
     private:

@@ -10,6 +10,7 @@
 #include "render/ObjectRenderer.hpp"
 #include "sim/Gladiator.hpp"
 #include "sim/Projectile.hpp"
+#include "sim/World.hpp"
 #include "controller/GladiatorController.hpp"
 
 static TTF_Font *comicNeue;
@@ -53,11 +54,7 @@ SDL_Surface* renderFpsString(int fps, SDL_Rect *rect)
 int main(int argc, char *argv[])
 {
     TextureLoader textureLoader;
-    Gladiator gladiator;
-    Gladiator bot;
-    std::vector<const Gladiator *> gladiators{&gladiator, &bot};
-    Projectile projectile;
-    projectile.setMoveDirection(45.0f);
+    World world;
 
     SDL_Init(SDL_INIT_EVERYTHING);
 
@@ -85,9 +82,6 @@ int main(int argc, char *argv[])
     SDL_initFramerate(&fpsManager);
     SDL_setFramerate(&fpsManager, 60);
 
-    SDL_Rect playerRect = { 0, 0, 128, 128 };
-    SDL_Rect projectileRect = { 128, 48, 32, 32 };
-
     SDL_LogSetAllPriority(SDL_LOG_PRIORITY_WARN);
 
     SDL_GameController *controller = nullptr;
@@ -102,7 +96,9 @@ int main(int argc, char *argv[])
     }
     assert(controller != nullptr);
 
-    GladiatorController gladiatorController(gladiator, controller);
+    int player = world.spawnGladiatorAt(-2.0f, 0.0f);
+    int bot = world.spawnGladiatorAt(2.0f, 0.0f);
+    GladiatorController gladiatorController(world, player, controller);
 
     while (!shouldQuit)
     {
@@ -123,11 +119,8 @@ int main(int argc, char *argv[])
             }
         }
 
+        world.tick();
         gladiatorController.update();
-        gladiator.tick();
-        bot.tick();
-
-        projectile.tick();
 
         int framerate = SDL_getFramerate(&fpsManager);
         SDL_Rect fpsRect;
@@ -140,10 +133,8 @@ int main(int argc, char *argv[])
         SDL_RenderClear(renderer);
         int err = 0;
 
-        objectRenderer.zoomToFitGladiators(gladiators);
-        objectRenderer.render(renderer, gladiator, TextureLoader::TEXTURE_PLAYER1);
-        objectRenderer.render(renderer, bot, TextureLoader::TEXTURE_PLAYER2);
-        objectRenderer.render(renderer, projectile);
+        objectRenderer.zoomToFitGladiators(world.getGladiators());
+        objectRenderer.render(renderer, world);
 
         SDL_RenderCopy(renderer, fpsTexture, NULL, &fpsRect);
 

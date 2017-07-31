@@ -2,16 +2,17 @@
 #define GLADIATOR_CONTROLLER_HPP
 
 #include "SDL.h"
-#include "sim/Gladiator.hpp"
+#include "sim/World.hpp"
 
 class GladiatorController
 {
     public:
-    GladiatorController(Gladiator & gladiator, SDL_GameController * gamepad);
+    GladiatorController(World & world, int gladiator, SDL_GameController * gamepad);
     void update();
 
     private:
-    Gladiator & m_gladiator;
+    World & m_world;
+    int m_gladiatorId;
     SDL_GameController * m_gamepad;
     float m_lastAimDirection;
     float m_lastMoveDirection;

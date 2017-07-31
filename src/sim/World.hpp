@@ -17,6 +17,7 @@ class World
     Projectile & getProjectile(int id);
     void tick();
     void gladiatorLaunchProjectile(int id);
+    std::vector<Gladiator> & getGladiators();
 
     private:
     std::vector<Gladiator> m_gladiators;

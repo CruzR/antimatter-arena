@@ -2,9 +2,10 @@
 #include "controller/GladiatorController.hpp"
 
 
-GladiatorController::GladiatorController(Gladiator & gladiator, SDL_GameController * gamepad)
+GladiatorController::GladiatorController(World & world, int gladiator, SDL_GameController * gamepad)
     :
-    m_gladiator(gladiator),
+    m_world(world),
+    m_gladiatorId(gladiator),
     m_gamepad(gamepad),
     m_lastAimDirection(0.0f)
 {
@@ -16,23 +17,25 @@ void GladiatorController::update()
     getAimDirection();
     getMoveParameters();
 
-    m_gladiator.setAimDirection(m_lastAimDirection);
-    m_gladiator.setMoveDirection(m_lastMoveDirection);
-    m_gladiator.setSpeed(m_lastMoveSpeed);
+    Gladiator & gladiator = m_world.getGladiator(m_gladiatorId);
+
+    gladiator.setAimDirection(m_lastAimDirection);
+    gladiator.setMoveDirection(m_lastMoveDirection);
+    gladiator.setSpeed(m_lastMoveSpeed);
 
     if (SDL_GameControllerGetAxis(m_gamepad, SDL_CONTROLLER_AXIS_TRIGGERLEFT) > 30000)
     {
-        if (m_gladiator.canEngageJetpack())
+        if (gladiator.canEngageJetpack())
         {
-            m_gladiator.engageJetpack();
+            gladiator.engageJetpack();
         }
     }
 
     if (SDL_GameControllerGetAxis(m_gamepad, SDL_CONTROLLER_AXIS_TRIGGERRIGHT) > 30000)
     {
-        if (m_gladiator.canLaunchRocket())
+        if (gladiator.canLaunchRocket())
         {
-            m_gladiator.launchRocket();
+            m_world.gladiatorLaunchProjectile(m_gladiatorId);
         }
     }
 }

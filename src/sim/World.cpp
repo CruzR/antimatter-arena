@@ -76,3 +76,8 @@ void World::gladiatorLaunchProjectile(int id)
     glad.launchRocket();
     spawnProjectileAt(x, y, glad.getAimDirection());
 }
+
+std::vector<Gladiator> & World::getGladiators()
+{
+    return m_gladiators;
+}

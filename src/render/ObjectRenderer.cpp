@@ -125,7 +125,7 @@ int ObjectRenderer::projectileSize()
     return std::round(32 * m_zoom);
 }
 
-void ObjectRenderer::zoomToFitGladiators(const std::vector<const Gladiator *> & gladiators)
+void ObjectRenderer::zoomToFitGladiators(std::vector<Gladiator> & gladiators)
 {
     std::vector<float> positionsX(gladiators.size());
     std::vector<float> positionsY(gladiators.size());
@@ -134,14 +134,14 @@ void ObjectRenderer::zoomToFitGladiators(const std::vector<const Gladiator *> & 
         gladiators.begin(),
         gladiators.end(),
         positionsX.begin(),
-        [](const Gladiator * g){ return g->getPositionX(); }
+        [](Gladiator & g){ return g.getPositionX(); }
     );
 
     std::transform(
         gladiators.begin(),
         gladiators.end(),
         positionsY.begin(),
-        [](const Gladiator * g){ return g->getPositionY(); }
+        [](Gladiator & g){ return g.getPositionY(); }
     );
 
     const float centerX = std::accumulate(
@@ -191,4 +191,17 @@ void ObjectRenderer::zoomToFitGladiators(const std::vector<const Gladiator *> & 
 void ObjectRenderer::toggleDrawDebugInformation()
 {
     m_drawDebugInformation = !m_drawDebugInformation;
+}
+
+void ObjectRenderer::render(SDL_Renderer * renderer, World & world)
+{
+    for (int i = 0; i < world.getNumProjectiles(); ++i)
+    {
+        render(renderer, world.getProjectile(i));
+    }
+
+    for (int i = 0; i < world.getNumGladiators(); ++i)
+    {
+        render(renderer, world.getGladiator(i), TextureLoader::TEXTURE_PLAYER1);
+    }
 }
