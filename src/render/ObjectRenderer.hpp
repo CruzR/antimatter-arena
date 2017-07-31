@@ -5,6 +5,7 @@
 #include "SDL.h"
 #include "sim/Gladiator.hpp"
 #include "sim/Projectile.hpp"
+#include "sim/Explosion.hpp"
 #include "sim/World.hpp"
 #include "render/TextureLoader.hpp"
 
@@ -15,6 +16,7 @@ class ObjectRenderer
     ObjectRenderer(TextureLoader & loader);
     void render(SDL_Renderer * renderer, const Gladiator & gladiator, TextureLoader::TextureId texture);
     void render(SDL_Renderer * renderer, const Projectile & projectile);
+    void render(SDL_Renderer * renderer, const Explosion & explosion);
     void render(SDL_Renderer * renderer, World & world);
     void zoomToFitGladiators(std::vector<Gladiator> & gladiators);
     void toggleDrawDebugInformation();
@@ -30,6 +32,7 @@ class ObjectRenderer
     void toScreenCoords(float inX, float inY, int & outX, int & outY);
     int playerSize();
     int projectileSize();
+    int explosionSize();
     void drawDebugRect(SDL_Renderer * renderer, SDL_Rect * rect);
 };
 

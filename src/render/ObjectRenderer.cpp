@@ -125,6 +125,11 @@ int ObjectRenderer::projectileSize()
     return std::round(32 * m_zoom);
 }
 
+int ObjectRenderer::explosionSize()
+{
+    return std::round(96 * m_zoom);
+}
+
 void ObjectRenderer::zoomToFitGladiators(std::vector<Gladiator> & gladiators)
 {
     std::vector<float> positionsX(gladiators.size());
@@ -204,4 +209,36 @@ void ObjectRenderer::render(SDL_Renderer * renderer, World & world)
     {
         render(renderer, world.getGladiator(i), TextureLoader::TEXTURE_PLAYER1);
     }
+
+    for (int i = 0; i < world.getNumExplosions(); ++i)
+    {
+        render(renderer, world.getExplosion(i));
+    }
+}
+
+void ObjectRenderer::render(SDL_Renderer * renderer, const Explosion & explosion)
+{
+    int screenX, screenY;
+    toScreenCoords(explosion.getPositionX(), explosion.getPositionY(), screenX, screenY);
+
+    SDL_Rect explosionRect;
+    explosionRect.x = screenX - explosionSize() / 2;
+    explosionRect.y = screenY - explosionSize() / 2;
+    explosionRect.w = explosionSize();
+    explosionRect.h = explosionSize();
+
+    if (rectInScreen(explosionRect, m_screenRect))
+    {
+        int err = SDL_SetRenderDrawColor(renderer, 223, 113, 38, 255);
+        assert(err == 0);
+
+        err = SDL_RenderFillRect(renderer, &explosionRect);
+
+        if (err < 0)
+        {
+            SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Rendering Explosion failed: %s", SDL_GetError());
+        }
+    }
+
+    drawDebugRect(renderer, &explosionRect);
 }
