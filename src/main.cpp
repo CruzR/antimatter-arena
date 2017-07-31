@@ -92,40 +92,31 @@ int main(int argc, char *argv[])
 
     SDL_LogSetAllPriority(SDL_LOG_PRIORITY_WARN);
 
-    SDL_GameController *controller = nullptr;
-    for (int i = 0; i < SDL_NumJoysticks(); ++i)
-    {
-        if (SDL_IsGameController(i))
-        {
-            controller = SDL_GameControllerOpen(i);
-            assert(controller != nullptr);
-            break;
-        }
-    }
-    assert(controller != nullptr);
-
-    int player = world.spawnGladiatorAt(-4.0f, 0.0f);
-    int bot = world.spawnGladiatorAt(4.0f, 0.0f);
-    world.getGladiator(bot).setAimDirection(180.0f);
-    world.gladiatorLaunchProjectile(player);
-    world.gladiatorLaunchProjectile(bot);
-    GladiatorController gladiatorController(world, player, controller);
+    bool gameStarted = false;
+    std::vector<GladiatorController> gladiatorControllers;
 
     bool someoneHasWon = false;
     SDL_Rect victoryLine1Rect{0, 0, 0, 0};
     SDL_Rect victoryLine2Rect{0, 0, 0, 0};
+    SDL_Rect instructionsRect{0, 0, 0, 0};
     TTF_SizeUTF8(comicNeueHuge, "VICTORY", &(victoryLine1Rect.w), &(victoryLine1Rect.h));
     TTF_SizeUTF8(comicNeueMedium, "Press any key to exit...", &(victoryLine2Rect.w), &(victoryLine2Rect.h));
+    TTF_SizeUTF8(comicNeueMedium, "Insert up to 4 gamepads, then press ENTER to start game.", &(instructionsRect.w), &(instructionsRect.h));
     victoryLine1Rect.y = 20;
     victoryLine1Rect.x = (960 - victoryLine1Rect.w) / 2;
     victoryLine2Rect.y = (540 - victoryLine2Rect.h - 10);
     victoryLine2Rect.x = (960 - victoryLine2Rect.w) / 2;
+    instructionsRect.y = (540 - instructionsRect.h) / 2;
+    instructionsRect.x = (960 - instructionsRect.w) / 2;
     SDL_Surface *victoryLine1Surface = TTF_RenderUTF8_Blended(comicNeueHuge, "VICTORY", {255, 255, 255, 255});
     SDL_Surface *victoryLine2Surface = TTF_RenderUTF8_Blended(comicNeueMedium, "Press any key to exit...", {255, 255, 255, 255});
+    SDL_Surface *instructionsSurface = TTF_RenderUTF8_Blended(comicNeueMedium, "Insert up to 4 gamepads, then press ENTER to start game.", {255, 255, 255, 255});
     SDL_Texture *victoryLine1Texture = SDL_CreateTextureFromSurface(renderer, victoryLine1Surface);
     SDL_Texture *victoryLine2Texture = SDL_CreateTextureFromSurface(renderer, victoryLine2Surface);
+    SDL_Texture *instructionsTexture = SDL_CreateTextureFromSurface(renderer, instructionsSurface);
     SDL_FreeSurface(victoryLine1Surface);
     SDL_FreeSurface(victoryLine2Surface);
+    SDL_FreeSurface(instructionsSurface);
 
     while (!shouldQuit)
     {
@@ -139,6 +130,31 @@ int main(int argc, char *argv[])
 
             if (event.type == SDL_KEYUP)
             {
+                if (!gameStarted)
+                {
+                    gameStarted = true;
+
+                    int numPlayers = 0;
+
+                    for (int i = 0; i < SDL_NumJoysticks() && numPlayers < 4; ++i)
+                    {
+                        if (SDL_IsGameController(i))
+                        {
+                            SDL_GameController *controller = SDL_GameControllerOpen(i);
+                            assert(controller != nullptr);
+                            int player = world.spawnGladiatorAt(std::cos(numPlayers * M_PI / 2) * 5.0, std::sin(numPlayers * M_PI / 2) * 5.0);
+                            gladiatorControllers.emplace_back(world, player, controller);
+                            numPlayers += 1;
+                        }
+                    }
+
+                    while (numPlayers < 4)
+                    {
+                        int dummy = world.spawnGladiatorAt(std::cos(numPlayers * M_PI / 2) * 5.0, std::sin(numPlayers * M_PI / 2) * 5.0);
+                        numPlayers += 1;
+                    }
+                }
+
                 if (someoneHasWon)
                 {
                     shouldQuit = true;
@@ -152,9 +168,13 @@ int main(int argc, char *argv[])
         }
 
         world.tick();
-        gladiatorController.update();
 
-        someoneHasWon = world.getNumPlayersAlive() <= 1;
+        for (GladiatorController & gladiatorController : gladiatorControllers)
+        {
+            gladiatorController.update();
+        }
+
+        someoneHasWon = gameStarted && world.getNumPlayersAlive() <= 1;
 
         int framerate = SDL_getFramerate(&fpsManager);
         SDL_Rect fpsRect;
@@ -169,6 +189,11 @@ int main(int argc, char *argv[])
 
         objectRenderer.zoomToFitGladiators(world.getGladiators());
         objectRenderer.render(renderer, world);
+
+        if (!gameStarted)
+        {
+            SDL_RenderCopy(renderer, instructionsTexture, NULL, &instructionsRect);
+        }
 
         if (someoneHasWon)
         {
@@ -187,6 +212,7 @@ int main(int argc, char *argv[])
 
     SDL_DestroyTexture(victoryLine1Texture);
     SDL_DestroyTexture(victoryLine2Texture);
+    SDL_DestroyTexture(instructionsTexture);
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(mainWindow);
