@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <cassert>
 #include <cmath>
 #include <numeric>
 #include "render/ObjectRenderer.hpp"
@@ -10,7 +11,8 @@ ObjectRenderer::ObjectRenderer(TextureLoader & loader)
     m_zoom(1.0f),
     m_screenRect{0, 0, 960, 540},
     m_cameraOffsetX(0.0f),
-    m_cameraOffsetY(0.0f)
+    m_cameraOffsetY(0.0f),
+    m_drawDebugInformation(false)
 {
 }
 
@@ -53,6 +55,26 @@ void ObjectRenderer::render(SDL_Renderer *renderer, const Gladiator & gladiator,
             SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Rendering Gladiator failed: %s", SDL_GetError());
         }
     }
+
+    drawDebugRect(renderer, &playerRect);
+}
+
+void ObjectRenderer::drawDebugRect(SDL_Renderer * renderer, SDL_Rect * rect)
+{
+    if (m_drawDebugInformation)
+    {
+        Uint8 tmpR, tmpG, tmpB, tmpA;
+        int err = SDL_GetRenderDrawColor(renderer, &tmpR, &tmpG, &tmpB, &tmpA);
+        assert(err == 0);
+
+        err = SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255);
+        assert(err == 0);
+
+        err = SDL_RenderDrawRect(renderer, rect);
+        assert(err == 0);
+
+        err = SDL_SetRenderDrawColor(renderer, tmpR, tmpG, tmpB, tmpA);
+    }
 }
 
 void ObjectRenderer::render(SDL_Renderer * renderer, const Projectile & projectile)
@@ -83,6 +105,8 @@ void ObjectRenderer::render(SDL_Renderer * renderer, const Projectile & projecti
             SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Rendering Projectile failed: %s", SDL_GetError());
         }
     }
+
+    drawDebugRect(renderer, &projectileRect);
 }
 
 void ObjectRenderer::toScreenCoords(float inX, float inY, int & outX, int & outY)
@@ -162,4 +186,9 @@ void ObjectRenderer::zoomToFitGladiators(const std::vector<const Gladiator *> & 
         m_screenRect.w = std::round(960.0f * m_zoom);
         m_screenRect.h = std::round(540.0f * m_zoom);
     }
+}
+
+void ObjectRenderer::toggleDrawDebugInformation()
+{
+    m_drawDebugInformation = !m_drawDebugInformation;
 }

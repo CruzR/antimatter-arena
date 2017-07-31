@@ -113,6 +113,14 @@ int main(int argc, char *argv[])
             {
                 shouldQuit = true;
             }
+
+            if (event.type == SDL_KEYUP)
+            {
+                if (event.key.keysym.scancode == SDL_SCANCODE_F5)
+                {
+                    objectRenderer.toggleDrawDebugInformation();
+                }
+            }
         }
 
         gladiatorController.update();
