@@ -2,6 +2,7 @@
 #include <cassert>
 #include <cmath>
 #include <sstream>
+#include <vector>
 #include "SDL.h"
 #include "SDL2_framerate.h"
 #include "SDL_ttf.h"
@@ -54,6 +55,7 @@ int main(int argc, char *argv[])
     TextureLoader textureLoader;
     Gladiator gladiator;
     Gladiator bot;
+    std::vector<const Gladiator *> gladiators{&gladiator, &bot};
     Projectile projectile;
     projectile.setMoveDirection(45.0f);
 
@@ -130,6 +132,7 @@ int main(int argc, char *argv[])
         SDL_RenderClear(renderer);
         int err = 0;
 
+        objectRenderer.zoomToFitGladiators(gladiators);
         objectRenderer.render(renderer, gladiator, TextureLoader::TEXTURE_PLAYER1);
         objectRenderer.render(renderer, bot, TextureLoader::TEXTURE_PLAYER2);
         objectRenderer.render(renderer, projectile);

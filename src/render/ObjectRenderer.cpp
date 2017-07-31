@@ -1,4 +1,6 @@
+#include <algorithm>
 #include <cmath>
+#include <numeric>
 #include "render/ObjectRenderer.hpp"
 
 
@@ -6,7 +8,9 @@ ObjectRenderer::ObjectRenderer(TextureLoader & loader)
     :
     m_textureLoader(loader),
     m_zoom(1.0f),
-    m_screenRect{0, 0, 960, 540}
+    m_screenRect{0, 0, 960, 540},
+    m_cameraOffsetX(0.0f),
+    m_cameraOffsetY(0.0f)
 {
 }
 
@@ -83,8 +87,8 @@ void ObjectRenderer::render(SDL_Renderer * renderer, const Projectile & projecti
 
 void ObjectRenderer::toScreenCoords(float inX, float inY, int & outX, int & outY)
 {
-    outX = std::round(inX * 48.0f * m_zoom);
-    outY = std::round(inY * 48.0f * m_zoom);
+    outX = std::round((inX - m_cameraOffsetX) * 48.0f * m_zoom);
+    outY = std::round((inY - m_cameraOffsetY) * 48.0f * m_zoom);
 }
 
 int ObjectRenderer::playerSize()
@@ -95,4 +99,67 @@ int ObjectRenderer::playerSize()
 int ObjectRenderer::projectileSize()
 {
     return std::round(32 * m_zoom);
+}
+
+void ObjectRenderer::zoomToFitGladiators(const std::vector<const Gladiator *> & gladiators)
+{
+    std::vector<float> positionsX(gladiators.size());
+    std::vector<float> positionsY(gladiators.size());
+
+    std::transform(
+        gladiators.begin(),
+        gladiators.end(),
+        positionsX.begin(),
+        [](const Gladiator * g){ return g->getPositionX(); }
+    );
+
+    std::transform(
+        gladiators.begin(),
+        gladiators.end(),
+        positionsY.begin(),
+        [](const Gladiator * g){ return g->getPositionY(); }
+    );
+
+    const float centerX = std::accumulate(
+        positionsX.begin(),
+        positionsX.end(),
+        0.0f
+    ) / gladiators.size();
+
+    const float centerY = std::accumulate(
+        positionsY.begin(),
+        positionsY.end(),
+        0.0f
+    ) / gladiators.size();
+
+    std::pair<std::vector<float>::iterator, std::vector<float>::iterator> extremaX = std::minmax_element(positionsX.begin(), positionsX.end());
+    std::pair<std::vector<float>::iterator, std::vector<float>::iterator> extremaY = std::minmax_element(positionsY.begin(), positionsY.end());
+
+    float bboxX = *extremaX.first - 2.0f;
+    float bboxY = *extremaY.first - 2.0f;
+    float bboxW = *extremaX.second - bboxX + 2.0f;
+    float bboxH = *extremaY.second - bboxY + 2.0f;
+
+    if (bboxH > 0.0f && bboxW > 0.0f)
+    {
+        if (bboxW / bboxH < 16.0f / 9.0f)
+        {
+            float newW = bboxH * 16.0f / 9.0f;
+            bboxX -= (newW - bboxW) / 2;
+            bboxW = newW;
+        }
+        else if (bboxW / bboxH > 16.0f / 9.0f)
+        {
+            float newH = bboxW * 9.0f / 16.0f;
+            bboxY -= (newH - bboxH) / 2;
+            bboxH = newH;
+        }
+
+        float newZoom = 960.0f / (bboxW * 48.0f);
+        m_cameraOffsetX = bboxX;
+        m_cameraOffsetY = bboxY;
+        m_zoom = newZoom;
+        m_screenRect.w = std::round(960.0f * m_zoom);
+        m_screenRect.h = std::round(540.0f * m_zoom);
+    }
 }
