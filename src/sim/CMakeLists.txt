@@ -1,1 +1,1 @@
-add_library(sim STATIC Gladiator.cpp Projectile.cpp World.cpp)
+add_library(sim STATIC Gladiator.cpp Projectile.cpp World.cpp Explosion.cpp)
