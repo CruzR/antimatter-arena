@@ -162,4 +162,16 @@ TEST_F(WorldTest, DestroyRocketsCollidingWithPlayers)
     EXPECT_EQ(1, world.getNumExplosions());
 }
 
+TEST_F(WorldTest, KnockbackPlayerWhenCollidingWithRocket)
+{
+    world.spawnProjectileAt(-1*Projectile::SPEED, 0.0f, 0.0f);
+    int id = world.spawnGladiatorAt(0.0f, 0.0f);
+    world.getGladiator(id).setMoveDirection(180.0f);
+
+    world.tick();
+
+    EXPECT_TRUE(world.getGladiator(id).isInKnockbackMode());
+    EXPECT_FLOAT_EQ(0.0f, world.getGladiator(id).getMoveDirection());
+}
+
 } // namespace

@@ -173,6 +173,8 @@ void World::performCollisionChecks()
             {
                 projectile.destroy();
                 spawnExplosionAt(x0, y0);
+
+                gladiator.knockBack(1.0f, std::atan2(y1 - y0, x1 - x0) / 2 / M_PI * 360.0f);
                 break;
             }
         }
