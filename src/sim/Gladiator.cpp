@@ -148,6 +148,11 @@ void Gladiator::tick()
             updateVelocity();
         }
     }
+
+    if (m_positionX < -20.0f || m_positionY < -20.0f || m_positionX > 20.0f || m_positionY > 20.0f)
+    {
+        applyDamage(1);
+    }
 }
 
 bool Gladiator::canEngageJetpack() const

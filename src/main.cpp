@@ -207,7 +207,7 @@ int main(int argc, char *argv[])
         SDL_Texture *fpsTexture = SDL_CreateTextureFromSurface(renderer, fpsSurface);
         SDL_FreeSurface(fpsSurface);
 
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+        SDL_SetRenderDrawColor(renderer, 63, 63, 116, 255);//0, 0, 0, SDL_ALPHA_OPAQUE);
         SDL_RenderClear(renderer);
         int err = 0;
 

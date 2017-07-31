@@ -206,6 +206,8 @@ void ObjectRenderer::toggleDrawDebugInformation()
 
 void ObjectRenderer::render(SDL_Renderer * renderer, World & world)
 {
+    renderFloor(renderer);
+
     for (int i = 0; i < world.getNumProjectiles(); ++i)
     {
         render(renderer, world.getProjectile(i));
@@ -250,4 +252,22 @@ void ObjectRenderer::render(SDL_Renderer * renderer, const Explosion & explosion
     }
 
     drawDebugRect(renderer, &explosionRect);
+}
+
+void ObjectRenderer::renderFloor(SDL_Renderer * renderer)
+{
+    int screenX, screenY;
+    toScreenCoords(0.0f, 0.0f, screenX, screenY);
+
+    SDL_Rect floorRect;
+    floorRect.x = screenX - std::round(40.0f * 48.0f * m_zoom) / 2;
+    floorRect.y = screenY - std::round(40.0f * 48.0f * m_zoom) / 2;
+    floorRect.w = std::round(40.0f * 48.0f * m_zoom);
+    floorRect.h = std::round(40.0f * 48.0f * m_zoom);
+
+    SDL_SetRenderDrawColor(renderer, 34, 32, 52, 255);//102, 57, 49, 255);//203, 219, 252, 255);// 105, 106, 106, 255); //238, 195, 154, 255);
+    SDL_RenderFillRect(renderer, &floorRect);
+
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderDrawRect(renderer, &floorRect);
 }

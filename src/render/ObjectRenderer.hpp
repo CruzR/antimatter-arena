@@ -34,6 +34,7 @@ class ObjectRenderer
     int projectileSize();
     int explosionSize();
     void drawDebugRect(SDL_Renderer * renderer, SDL_Rect * rect);
+    void renderFloor(SDL_Renderer * renderer);
 };
 
 #endif // OBJECT_RENDERER_HPP
