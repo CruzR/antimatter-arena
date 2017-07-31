@@ -10,6 +10,7 @@ include_directories(${SDL2_TTF_INCLUDE_DIRS})
 
 add_subdirectory(sim)
 add_subdirectory(render)
+add_subdirectory(controller)
 
 add_executable(ludumdare39-game main.cpp)
-target_link_libraries(ludumdare39-game render sim ${SDL2_IMAGE_LIBRARIES} ${SDL2_GFX_LIBRARIES} ${SDL2_TTF_LIBRARIES} ${SDL2_LIBRARY})
+target_link_libraries(ludumdare39-game controller render sim ${SDL2_IMAGE_LIBRARIES} ${SDL2_GFX_LIBRARIES} ${SDL2_TTF_LIBRARIES} ${SDL2_LIBRARY})
