@@ -219,4 +219,62 @@ TEST_F(GladiatorTest, PositionChangesAccordingToVelocity)
     EXPECT_NEAR(0.0f, gladiator.getPositionY(), 1.0e-6f);
 }
 
+TEST_F(GladiatorTest, IsNotInKnockbackModeByDefault)
+{
+    EXPECT_FALSE(gladiator.isInKnockbackMode());
+}
+
+TEST_F(GladiatorTest, IsInKnockbackModeAfterKnockback)
+{
+    gladiator.knockBack(1.0f, 0.0f);
+    EXPECT_TRUE(gladiator.isInKnockbackMode());
+}
+
+TEST_F(GladiatorTest, LeavesKnockbackModeAfterTimout)
+{
+    gladiator.knockBack(1.0f, 0.0f);
+
+    for (int i = 0; i < Gladiator::KNOCKBACK_TIMEOUT; ++i)
+    {
+        gladiator.tick();
+    }
+
+    EXPECT_FALSE(gladiator.isInKnockbackMode());
+}
+
+TEST_F(GladiatorTest, MoveDirectionIsLockedDuringKnockback)
+{
+    gladiator.knockBack(1.0f, 0.0f);
+    const float moveDirection = gladiator.getMoveDirection();
+    gladiator.setMoveDirection(moveDirection + 90.0f);
+    EXPECT_FLOAT_EQ(moveDirection, gladiator.getMoveDirection());
+}
+
+TEST_F(GladiatorTest, MoveSpeedIsLockedDuringKnockback)
+{
+    gladiator.knockBack(1.0f, 0.0f);
+    const float moveSpeed = gladiator.getSpeed();
+    gladiator.setSpeed(moveSpeed + 0.5f);
+    EXPECT_FLOAT_EQ(moveSpeed, gladiator.getSpeed());
+}
+
+TEST_F(GladiatorTest, CannotUseJetpackDuringKnockback)
+{
+    gladiator.knockBack(1.0f, 0.0f);
+    EXPECT_FALSE(gladiator.canEngageJetpack());
+}
+
+TEST_F(GladiatorTest, SpeedIsKnockbackSpeedDuringKnockback)
+{
+    gladiator.knockBack(1.0f, 0.0f);
+    EXPECT_FLOAT_EQ(Gladiator::KNOCKBACK_SPEED, gladiator.getSpeed());
+}
+
+TEST_F(GladiatorTest, LatestKnockbackWins)
+{
+    gladiator.knockBack(1.0f, 0.0f);
+    gladiator.knockBack(1.0f, 90.0f);
+    EXPECT_FLOAT_EQ(90.0f, gladiator.getMoveDirection());
+}
+
 } // namespace

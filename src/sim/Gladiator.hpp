@@ -42,6 +42,13 @@ class Gladiator
 
     static constexpr float COLLISION_RADIUS = 0.5f;
 
+    bool isInKnockbackMode() const;
+    void knockBack(float energy, float direction);
+
+    static const int KNOCKBACK_TIMEOUT = 60;
+    /* Equivalent to 54 km/h. */
+    static constexpr float KNOCKBACK_SPEED = 0.25f;
+
     private:
     bool m_active;
     float m_aimDirection;
@@ -55,6 +62,9 @@ class Gladiator
     int m_jetpackActiveCooldown;
     float m_positionX;
     float m_positionY;
+
+    bool m_inKnockbackMode;
+    int m_knockbackTimeout;
 
     void updateVelocity();
 };

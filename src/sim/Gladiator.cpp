@@ -21,7 +21,8 @@ Gladiator::Gladiator(float x, float y)
     m_jetpackActive(false),
     m_jetpackActiveCooldown(0),
     m_positionX(x),
-    m_positionY(y)
+    m_positionY(y),
+    m_inKnockbackMode(false)
 {
 }
 
@@ -59,7 +60,7 @@ void Gladiator::setSpeed(float speed)
 {
     assert(speed >= 0.0f);
 
-    if (!m_jetpackActive)
+    if (!m_jetpackActive && !m_inKnockbackMode)
     {
         m_speed = speed;
         updateVelocity();
@@ -73,7 +74,7 @@ float Gladiator::getMoveDirection() const
 
 void Gladiator::setMoveDirection(float moveDirection)
 {
-    if (!m_jetpackActive)
+    if (!m_jetpackActive && !m_inKnockbackMode)
     {
         m_moveDirection = clampAngles(moveDirection);
         updateVelocity();
@@ -133,11 +134,23 @@ void Gladiator::tick()
             updateVelocity();
         }
     }
+
+    if (m_knockbackTimeout > 0)
+    {
+        m_knockbackTimeout -= 1;
+
+        if (m_knockbackTimeout == 0)
+        {
+            m_inKnockbackMode = false;
+            m_speed = 0.0f;
+            updateVelocity();
+        }
+    }
 }
 
 bool Gladiator::canEngageJetpack() const
 {
-    return m_jetpackCooldown <= 0;
+    return !m_inKnockbackMode && m_jetpackCooldown <= 0;
 }
 
 void Gladiator::engageJetpack()
@@ -162,4 +175,19 @@ float Gladiator::getPositionX() const
 float Gladiator::getPositionY() const
 {
     return m_positionY;
+}
+
+bool Gladiator::isInKnockbackMode() const
+{
+    return m_inKnockbackMode;
+}
+
+void Gladiator::knockBack(float energy, float direction)
+{
+    m_speed = energy * KNOCKBACK_SPEED;
+    m_moveDirection = direction;
+    updateVelocity();
+
+    m_inKnockbackMode = true;
+    m_knockbackTimeout = KNOCKBACK_TIMEOUT;
 }
