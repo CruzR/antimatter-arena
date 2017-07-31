@@ -6,8 +6,7 @@ class Gladiator
     public:
     Gladiator();
     Gladiator(float positionX, float positionY);
-    void initialize();
-    bool isActive() const;
+    bool isAlive() const;
     float getAimDirection() const;
     void setAimDirection(float aimDirection);
     float getSpeed() const;
@@ -50,7 +49,7 @@ class Gladiator
     static constexpr float KNOCKBACK_SPEED = 0.25f;
 
     private:
-    bool m_active;
+    bool m_alive;
     float m_aimDirection;
     float m_speed;
     float m_moveDirection;

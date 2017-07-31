@@ -11,15 +11,9 @@ class GladiatorTest : public ::testing::Test
     Gladiator gladiator;
 };
 
-TEST_F(GladiatorTest, IsInactiveByDefault)
+TEST_F(GladiatorTest, IsAliveByDefault)
 {
-    EXPECT_FALSE(gladiator.isActive());
-}
-
-TEST_F(GladiatorTest, IsActiveAfterInitialization)
-{
-    gladiator.initialize();
-    EXPECT_TRUE(gladiator.isActive());
+    EXPECT_TRUE(gladiator.isAlive());
 }
 
 TEST_F(GladiatorTest, AimsEastByDefault)

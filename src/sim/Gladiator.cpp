@@ -10,7 +10,7 @@ Gladiator::Gladiator()
 
 Gladiator::Gladiator(float x, float y)
     :
-    m_active(false),
+    m_alive(true),
     m_aimDirection(0.0f),
     m_speed(0.0f),
     m_moveDirection(0.0f),
@@ -26,14 +26,9 @@ Gladiator::Gladiator(float x, float y)
 {
 }
 
-void Gladiator::initialize()
+bool Gladiator::isAlive() const
 {
-    m_active = true;
-}
-
-bool Gladiator::isActive() const
-{
-    return m_active;
+    return m_alive;
 }
 
 float Gladiator::getAimDirection() const
