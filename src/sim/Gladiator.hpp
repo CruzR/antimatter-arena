@@ -5,6 +5,7 @@ class Gladiator
 {
     public:
     Gladiator();
+    Gladiator(float positionX, float positionY);
     void initialize();
     bool isActive() const;
     float getAimDirection() const;
@@ -36,6 +37,8 @@ class Gladiator
 
     float getPositionX() const;
     float getPositionY() const;
+
+    static constexpr float PROJECTILE_DISTANCE = 1.25f;
 
     private:
     bool m_active;

@@ -4,6 +4,12 @@
 
 Gladiator::Gladiator()
     :
+    Gladiator(0.0f, 0.0f)
+{
+}
+
+Gladiator::Gladiator(float x, float y)
+    :
     m_active(false),
     m_aimDirection(0.0f),
     m_speed(0.0f),
@@ -14,8 +20,8 @@ Gladiator::Gladiator()
     m_jetpackCooldown(0),
     m_jetpackActive(false),
     m_jetpackActiveCooldown(0),
-    m_positionX(0.0f),
-    m_positionY(0.0f)
+    m_positionX(x),
+    m_positionY(y)
 {
 }
 

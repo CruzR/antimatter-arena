@@ -5,6 +5,7 @@ class Projectile
 {
     public:
     Projectile();
+    Projectile(float x, float y, float moveDirection);
     float getPositionX() const;
     float getPositionY() const;
     void setPosition(float x, float y);

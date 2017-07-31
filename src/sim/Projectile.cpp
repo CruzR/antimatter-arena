@@ -4,9 +4,15 @@
 
 Projectile::Projectile()
     :
-    m_positionX(0.0f),
-    m_positionY(0.0f),
-    m_moveDirection(0.0f),
+    Projectile(0.0f, 0.0f, 0.0f)
+{
+}
+
+Projectile::Projectile(float x, float y, float moveDirection)
+    :
+    m_positionX(x),
+    m_positionY(y),
+    m_moveDirection(moveDirection),
     m_explosionTimout(EXPLODE_TIMEOUT)
 {
     updateVelocity();
