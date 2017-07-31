@@ -15,6 +15,7 @@ TEST_F(WorldTest, IsEmptyAfterInitialization)
 {
     EXPECT_EQ(0, world.getNumGladiators());
     EXPECT_EQ(0, world.getNumProjectiles());
+    EXPECT_EQ(0, world.getNumExplosions());
 }
 
 TEST_F(WorldTest, SpawnGladiatorIncreasesGladiatorCount)
@@ -90,6 +91,41 @@ TEST_F(WorldTest, GladiatorCannotLaunchTwice)
     world.gladiatorLaunchProjectile(id);
     world.gladiatorLaunchProjectile(id);
     EXPECT_EQ(1, world.getNumProjectiles());
+}
+
+TEST_F(WorldTest, SpawnExplosionIncreasesExplosionCount)
+{
+    world.spawnExplosionAt(0.0f, 0.0f);
+    EXPECT_EQ(1, world.getNumExplosions());
+
+    world.spawnExplosionAt(1.0f, 1.0f);
+    EXPECT_EQ(2, world.getNumExplosions());
+}
+
+TEST_F(WorldTest, CanRetrieveSpawnedExplosion)
+{
+    int id = world.spawnExplosionAt(0.0f, 0.0f);
+    EXPECT_NO_THROW(world.getExplosion(id));
+    EXPECT_ANY_THROW(world.getExplosion(id + 1));
+}
+
+TEST_F(WorldTest, SpawnsExplosionAtCorrectLocation)
+{
+    int id = world.spawnExplosionAt(1.0f, 1.0f);
+    EXPECT_FLOAT_EQ(1.0f, world.getExplosion(id).getPositionX());
+    EXPECT_FLOAT_EQ(1.0f, world.getExplosion(id).getPositionY());
+}
+
+TEST_F(WorldTest, RemovesDestroyedExplosions)
+{
+    world.spawnExplosionAt(0.0f, 0.0f);
+
+    for (int i = 0; i < Explosion::VANISH_TIMEOUT; ++i)
+    {
+        world.tick();
+    }
+
+    EXPECT_EQ(0, world.getNumExplosions());
 }
 
 } // namespace

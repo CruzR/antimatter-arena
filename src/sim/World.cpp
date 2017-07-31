@@ -56,6 +56,20 @@ void World::tick()
 
     m_projectiles = liveProjectiles;
 
+    std::vector<Explosion> liveExplosions;
+    liveExplosions.reserve(m_explosions.size());
+
+    for (Explosion & explosion : m_explosions)
+    {
+        explosion.tick();
+        if (!explosion.isDestroyed())
+        {
+            liveExplosions.push_back(explosion);
+        }
+    }
+
+    m_explosions = liveExplosions;
+
     for (Gladiator & gladiator : m_gladiators)
     {
         gladiator.tick();
@@ -80,4 +94,21 @@ void World::gladiatorLaunchProjectile(int id)
 std::vector<Gladiator> & World::getGladiators()
 {
     return m_gladiators;
+}
+
+int World::getNumExplosions() const
+{
+    return m_explosions.size();
+}
+
+int World::spawnExplosionAt(float x, float y)
+{
+    int newId = m_explosions.size();
+    m_explosions.emplace_back(x, y);
+    return newId;
+}
+
+Explosion & World::getExplosion(int id)
+{
+    return m_explosions.at(id);
 }

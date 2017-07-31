@@ -4,6 +4,7 @@
 #include <vector>
 #include "sim/Gladiator.hpp"
 #include "sim/Projectile.hpp"
+#include "sim/Explosion.hpp"
 
 class World
 {
@@ -18,10 +19,14 @@ class World
     void tick();
     void gladiatorLaunchProjectile(int id);
     std::vector<Gladiator> & getGladiators();
+    int getNumExplosions() const;
+    int spawnExplosionAt(float x, float y);
+    Explosion & getExplosion(int id);
 
     private:
     std::vector<Gladiator> m_gladiators;
     std::vector<Projectile> m_projectiles;
+    std::vector<Explosion> m_explosions;
 };
 
 #endif // WORLD_HPP
