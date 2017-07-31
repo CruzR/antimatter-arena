@@ -59,6 +59,30 @@ SDL_Surface* renderFpsString(int fps, SDL_Rect *rect)
     return renderedText;
 }
 
+void renderGladiatorStats(SDL_Renderer * renderer, const Gladiator & glad, int i)
+{
+    std::ostringstream s;
+    s << glad.getHealth() << " HP";
+    std::string stats = s.str();
+
+    SDL_Rect rect;
+    TTF_SizeUTF8(comicNeueMedium, stats.c_str(), &(rect.w), &(rect.h));
+    rect.y = 540 - rect.h - 10;
+    rect.x = i * 960 / 4 + (960 / 4 - rect.w) / 2;
+    SDL_Color colors[] =
+    {
+        {172, 50, 50, 255},
+        {99, 155, 255, 255},
+        {106, 190, 48, 255},
+        {251, 242, 54, 255}
+    };
+    SDL_Surface * surf = TTF_RenderUTF8_Solid(comicNeueMedium, stats.c_str(), colors[glad.getColor()]);
+    SDL_Texture * text = SDL_CreateTextureFromSurface(renderer, surf);
+    SDL_RenderCopy(renderer, text, NULL, &rect);
+    SDL_DestroyTexture(text);
+    SDL_FreeSurface(surf);
+}
+
 int main(int argc, char *argv[])
 {
     TextureLoader textureLoader;
@@ -193,6 +217,14 @@ int main(int argc, char *argv[])
         if (!gameStarted)
         {
             SDL_RenderCopy(renderer, instructionsTexture, NULL, &instructionsRect);
+        }
+
+        if (gameStarted && !someoneHasWon)
+        {
+            for (int i = 0; i < world.getNumGladiators(); ++i)
+            {
+                renderGladiatorStats(renderer, world.getGladiator(i), i);
+            }
         }
 
         if (someoneHasWon)
