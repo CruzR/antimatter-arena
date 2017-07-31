@@ -19,6 +19,22 @@ void GladiatorController::update()
     m_gladiator.setAimDirection(m_lastAimDirection);
     m_gladiator.setMoveDirection(m_lastMoveDirection);
     m_gladiator.setSpeed(m_lastMoveSpeed);
+
+    if (SDL_GameControllerGetAxis(m_gamepad, SDL_CONTROLLER_AXIS_TRIGGERLEFT) > 30000)
+    {
+        if (m_gladiator.canEngageJetpack())
+        {
+            m_gladiator.engageJetpack();
+        }
+    }
+
+    if (SDL_GameControllerGetAxis(m_gamepad, SDL_CONTROLLER_AXIS_TRIGGERRIGHT) > 30000)
+    {
+        if (m_gladiator.canLaunchRocket())
+        {
+            m_gladiator.launchRocket();
+        }
+    }
 }
 
 
