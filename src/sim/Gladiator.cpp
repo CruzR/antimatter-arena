@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cassert>
 #include <cmath>
 #include "sim/Gladiator.hpp"
@@ -10,7 +11,6 @@ Gladiator::Gladiator()
 
 Gladiator::Gladiator(float x, float y)
     :
-    m_alive(true),
     m_aimDirection(0.0f),
     m_speed(0.0f),
     m_moveDirection(0.0f),
@@ -22,13 +22,14 @@ Gladiator::Gladiator(float x, float y)
     m_jetpackActiveCooldown(0),
     m_positionX(x),
     m_positionY(y),
-    m_inKnockbackMode(false)
+    m_inKnockbackMode(false),
+    m_health(MAX_HEALTH)
 {
 }
 
 bool Gladiator::isAlive() const
 {
-    return m_alive;
+    return m_health > 0;
 }
 
 float Gladiator::getAimDirection() const
@@ -185,4 +186,16 @@ void Gladiator::knockBack(float energy, float direction)
 
     m_inKnockbackMode = true;
     m_knockbackTimeout = KNOCKBACK_TIMEOUT;
+}
+
+const int Gladiator::MAX_HEALTH = 250;
+
+int Gladiator::getHealth() const
+{
+    return m_health;
+}
+
+void Gladiator::applyDamage(int amount)
+{
+    m_health = std::max(0, m_health - amount);
 }

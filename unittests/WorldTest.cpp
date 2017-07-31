@@ -174,4 +174,16 @@ TEST_F(WorldTest, KnockbackPlayerWhenCollidingWithRocket)
     EXPECT_FLOAT_EQ(0.0f, world.getGladiator(id).getMoveDirection());
 }
 
+TEST_F(WorldTest, DamagePlayerWhenCollidingWithRockets)
+{
+    world.spawnProjectileAt(-1*Projectile::SPEED, 0.0f, 0.0f);
+    int id = world.spawnGladiatorAt(0.0f, 0.0f);
+    world.getGladiator(id).setMoveDirection(180.0f);
+
+    world.tick();
+
+    EXPECT_GT(Gladiator::MAX_HEALTH, world.getGladiator(id).getHealth());
+    EXPECT_EQ(Gladiator::MAX_HEALTH - Projectile::DAMAGE, world.getGladiator(id).getHealth());
+}
+
 } // namespace

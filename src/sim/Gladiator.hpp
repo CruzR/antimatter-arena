@@ -48,8 +48,12 @@ class Gladiator
     /* Equivalent to 54 km/h. */
     static constexpr float KNOCKBACK_SPEED = 0.25f;
 
+    int getHealth() const;
+    void applyDamage(int amount);
+
+    static const int MAX_HEALTH;
+
     private:
-    bool m_alive;
     float m_aimDirection;
     float m_speed;
     float m_moveDirection;
@@ -64,6 +68,8 @@ class Gladiator
 
     bool m_inKnockbackMode;
     int m_knockbackTimeout;
+
+    int m_health;
 
     void updateVelocity();
 };

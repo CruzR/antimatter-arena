@@ -271,4 +271,27 @@ TEST_F(GladiatorTest, LatestKnockbackWins)
     EXPECT_FLOAT_EQ(90.0f, gladiator.getMoveDirection());
 }
 
+TEST_F(GladiatorTest, SpawnsWithFullHP)
+{
+    EXPECT_EQ(Gladiator::MAX_HEALTH, gladiator.getHealth());
+}
+
+TEST_F(GladiatorTest, DamageReducesHP)
+{
+    gladiator.applyDamage(10);
+    EXPECT_EQ(Gladiator::MAX_HEALTH - 10, gladiator.getHealth());
+}
+
+TEST_F(GladiatorTest, MinHPIsZero)
+{
+    gladiator.applyDamage(Gladiator::MAX_HEALTH + 10);
+    EXPECT_EQ(0, gladiator.getHealth());
+}
+
+TEST_F(GladiatorTest, NotAliveIfHPIsZero)
+{
+    gladiator.applyDamage(Gladiator::MAX_HEALTH);
+    EXPECT_FALSE(gladiator.isAlive());
+}
+
 } // namespace

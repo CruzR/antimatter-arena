@@ -24,6 +24,8 @@ class Projectile
 
     static constexpr float COLLISION_RADIUS = 0.333334f;
 
+    static const int DAMAGE = 25;
+
     private:
     float m_positionX;
     float m_positionY;
