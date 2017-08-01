@@ -12,6 +12,7 @@
 #include "sim/Projectile.hpp"
 #include "sim/World.hpp"
 #include "controller/GladiatorController.hpp"
+#include "controller/GladiatorBot.hpp"
 
 static TTF_Font *comicNeueTiny;
 static TTF_Font *comicNeueMedium;
@@ -118,6 +119,7 @@ int main(int argc, char *argv[])
 
     bool gameStarted = false;
     std::vector<GladiatorController> gladiatorControllers;
+    std::vector<GladiatorBot> gladiatorBots;
 
     bool someoneHasWon = false;
     SDL_Rect victoryLine1Rect{0, 0, 0, 0};
@@ -210,6 +212,7 @@ int main(int argc, char *argv[])
                     while (numPlayers < 4)
                     {
                         int dummy = world.spawnGladiatorAt(std::cos(numPlayers * M_PI / 2) * 5.0, std::sin(numPlayers * M_PI / 2) * 5.0, static_cast<Gladiator::Color>(numPlayers % static_cast<int>(Gladiator::NUM_COLORS)));
+                        gladiatorBots.emplace_back(world, dummy);
                         numPlayers += 1;
                     }
                 }
@@ -231,6 +234,11 @@ int main(int argc, char *argv[])
         for (GladiatorController & gladiatorController : gladiatorControllers)
         {
             gladiatorController.update();
+        }
+
+        for (GladiatorBot & bot : gladiatorBots)
+        {
+            bot.update();
         }
 
         someoneHasWon = gameStarted && world.getNumPlayersAlive() <= 1;

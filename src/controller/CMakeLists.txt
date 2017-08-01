@@ -1,1 +1,1 @@
-add_library(controller STATIC GladiatorController.cpp)
+add_library(controller STATIC GladiatorController.cpp GladiatorBot.cpp)
