@@ -32,6 +32,11 @@ void GladiatorBot::update()
 {
     Gladiator & g = m_world.getGladiator(m_gladiatorId);
 
+    if (!g.isAlive())
+    {
+        return;
+    }
+
     bool needJetpack = false;
     float aimDirection = 0.0f;
     float moveDirection = 0.0f;

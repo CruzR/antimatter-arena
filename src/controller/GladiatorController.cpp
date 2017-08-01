@@ -35,6 +35,11 @@ void GladiatorController::update()
 
     Gladiator & gladiator = m_world.getGladiator(m_gladiatorId);
 
+    if (!gladiator.isAlive())
+    {
+        return;
+    }
+
     gladiator.setAimDirection(m_lastAimDirection);
     gladiator.setMoveDirection(m_lastMoveDirection);
     gladiator.setSpeed(m_lastMoveSpeed);
