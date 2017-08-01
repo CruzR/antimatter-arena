@@ -1,8 +1,18 @@
 enable_testing()
 
-find_package(GTest REQUIRED)
+find_package(GTest QUIET)
 
-add_executable(run-unittests GladiatorTest.cpp ProjectileTest.cpp WorldTest.cpp ExplosionTest.cpp)
-target_link_libraries(run-unittests sim GTest::GTest GTest::Main)
+if (GTEST_FOUND)
 
-add_test(UnitTests run-unittests)
+    add_executable(run-unittests
+                   GladiatorTest.cpp
+                   ProjectileTest.cpp
+                   WorldTest.cpp
+                   ExplosionTest.cpp)
+
+    target_link_libraries(run-unittests
+                          sim GTest::GTest GTest::Main)
+
+    add_test(UnitTests run-unittests)
+
+endif (GTEST_FOUND)
