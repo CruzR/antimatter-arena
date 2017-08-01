@@ -76,7 +76,7 @@ void renderGladiatorStats(SDL_Renderer * renderer, const Gladiator & glad, int i
         {106, 190, 48, 255},
         {251, 242, 54, 255}
     };
-    SDL_Surface * surf = TTF_RenderUTF8_Solid(comicNeueMedium, stats.c_str(), colors[glad.getColor()]);
+    SDL_Surface * surf = TTF_RenderUTF8_Blended(comicNeueMedium, stats.c_str(), colors[glad.getColor()]);
     SDL_Texture * text = SDL_CreateTextureFromSurface(renderer, surf);
     SDL_RenderCopy(renderer, text, NULL, &rect);
     SDL_DestroyTexture(text);
