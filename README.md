@@ -1,6 +1,8 @@
 # Antimatter Arena #
 
-*A game created for ludum dare 39.*
+**A game created for ludum dare 39.**
+
+![gameplay screenshot](screenshot.png)
 
 Millenia ago, the $SYSTEM_NAME system faced an exitential threat:
 A gigantic antimatter cloud was set to collide wit the system,
