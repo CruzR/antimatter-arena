@@ -118,11 +118,16 @@ void Gladiator::updateVelocity()
 
 bool Gladiator::canLaunchRocket() const
 {
-    return m_launchCooldown <= 0;
+    return isAlive() && m_launchCooldown <= 0;
 }
 
 void Gladiator::launchRocket()
 {
+    if (!canLaunchRocket())
+    {
+        return;
+    }
+
     m_launchCooldown = ROCKET_LAUNCH_COOLDOWN;
 }
 
@@ -178,6 +183,11 @@ bool Gladiator::canEngageJetpack() const
 
 void Gladiator::engageJetpack()
 {
+    if (!canEngageJetpack())
+    {
+        return;
+    }
+
     m_speed = JETPACK_SPEED;
     m_moveDirection = m_aimDirection;
     updateVelocity();

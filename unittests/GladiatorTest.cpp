@@ -310,4 +310,11 @@ TEST_F(GladiatorTest, NotAliveIfHPIsZero)
     EXPECT_FALSE(gladiator.isAlive());
 }
 
+TEST_F(GladiatorTest, DeadGladiatorsCannotLaunchRockets)
+{
+    gladiator.applyDamage(Gladiator::MAX_HEALTH);
+    EXPECT_FALSE(gladiator.canLaunchRocket());
+}
+
+
 } // namespace
