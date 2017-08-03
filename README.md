@@ -74,4 +74,7 @@ Contents of the cmake/Modules/ directory are based on official CMake
 modules and are licensed under a 3-clause BSD license. See
 LICENSE-BSD-3-clause.txt for full license terms.
 
+The database of game controller mappings is licensed under the
+zlib/libpng license, see LICENSE-Zlib.txt for the full license text.
+
 For a detailed, per-file enumeration, see debian/copyright.

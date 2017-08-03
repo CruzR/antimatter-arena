@@ -100,6 +100,13 @@ void renderGladiatorStats(SDL_Renderer * renderer, const Gladiator & glad, int i
     SDL_FreeSurface(surf);
 }
 
+static void initGameControllers()
+{
+    int err = SDL_GameControllerAddMappingsFromFile("assets/gamecontrollerdb.txt");
+    assert(err >= 0);
+}
+
+
 int main(int argc, char *argv[])
 {
     TextureLoader textureLoader;
@@ -108,6 +115,7 @@ int main(int argc, char *argv[])
     SDL_Init(SDL_INIT_EVERYTHING);
 
     initTTF();
+    initGameControllers();
 
     SDL_Window *mainWindow = SDL_CreateWindow("Antimatter Arena",
                                               SDL_WINDOWPOS_UNDEFINED,
